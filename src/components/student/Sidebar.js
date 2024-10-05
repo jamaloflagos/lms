@@ -2,11 +2,11 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
   return (
-    <div>
+    <div className="sticky top-0 h-screen">
       {showSidebar ? (
-        <div className="bg-blue-900 text-white w-56 h-screen">
+        <div className="bg-blue-900 text-white w-56 h-full">
           <div className="flex justify-between px-4 py-3">
             <span className="text-lg font-bold">LMS</span>
             <i
@@ -14,7 +14,7 @@ const Sidebar = () => {
               onClick={() => setShowSidebar((prev) => !prev)}
             ></i>
           </div>
-          <nav className="flex flex-col space-y-4 px-4 py-2">
+          <nav className="flex flex-col space-y-4 px-4 py-2  sticky top-0">
             <NavLink
               to="dashboard"
               className={({ isActive }) =>
@@ -119,10 +119,11 @@ const Sidebar = () => {
                 Account
               </div>
             </NavLink>
+            <NavLink to={"groups"}>Study group</NavLink>
           </nav>
         </div>
       ) : (
-        <div className="w-12">
+        <div className="w-12 fixed top-0 left-0">
           <i
             class="fa-solid fa-bars"
             onClick={() => setShowSidebar((prev) => !prev)}

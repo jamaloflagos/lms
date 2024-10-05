@@ -11,10 +11,11 @@ module.exports = {
         'vl-blue': '#F2F8FD',
         'vd-grey': '#1D1D1F',
         'md-grey': '#666A6D',
-        'white': '#FFFFFF'
+        'white': '#FFFFFF',  // Add comma here
+        'green': '#00FF00',
+        'yellow': '#FFFF00'
       }
     },
   },
   plugins: [],
 }
-

@@ -16,16 +16,20 @@ import Attendances from "./pages/Attendances";
 import Subject from "./pages/Subject";
 import { useStudent } from "./hooks/useStudent";
 import StudentRoutes from "./components/student/Routes";
+import Payment from "./pages/Payment";
+import ClassPayment from "./pages/ClassPayment";
 
 function App() {
   const { studentId } = useStudent();
   return (
-    <div className="App">
+    <div className="App h-full">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login/:user" element={<Login />} />
           <Route path="/apply" element={<Application />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/payment/:classId" element={<ClassPayment />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/lesson/:topic/:lessonId" element={<Lesson />} />
           <Route path="/subject/:subject/:teacherId" element={<Subject />} />

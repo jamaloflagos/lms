@@ -9,6 +9,12 @@ import ParentInfoForm from "./ParentInfoForm";
 import AccountSetting from "./AccountSetting";
 import NotificationSetting from "./NotificationSetting";
 import Course from "./Course";
+import Exams from "./Exams";
+import Exam from "./Exam";
+import Tests from "./Tests";
+import Test from "./Test";
+import Groups from "./Groups";
+import Group from "./Group";
 
 const StudentRoutes = () => {
   return (
@@ -28,8 +34,14 @@ const StudentRoutes = () => {
           <Route index element={<StudentInfoForm />} />
         </Route>
         <Route index element={<Dashboard />} />
+        <Route path="curriculum/:course/:courseId" element={<Course />} />
+        <Route path="exams" element={<Exams />} />
+        <Route path="exam/:examId" element={<Exam />} />
+        <Route path="tests" element={<Tests />} />
+        <Route path="test/:testId" element={<Test />} />
+        <Route path="groups" element={<Groups />} />
+        <Route path="group/:groupId/:groupName/:name" element={<Group />} />
       </Route>
-      <Route path="curriculum/:course/:courseId" element={<Course />} />
     </Routes>
   );
 };
