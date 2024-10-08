@@ -39,7 +39,7 @@ const Payment = () => {
     const handleCreatePayment = (e) => {
         e.preventDefault();
         console.log({ type, amount, inputClasses });
-        mutation.mutate({ type, amount, inputClasses })
+        mutation.mutate({ type, amount, classes: inputClasses })
     };
 
     const handleClassChange = (e) => {

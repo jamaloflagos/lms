@@ -61,7 +61,7 @@ const LandingPage = () => {
               </ul>
             )}
           </li>
-          <li><Link to="/payments">Payments</Link></li>
+          <li><Link to="/payment">Payments</Link></li>
         </ul>
       </nav>
 

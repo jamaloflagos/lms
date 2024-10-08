@@ -8,6 +8,7 @@ const GroupChat = ({ groupId, groupName }) => {
     const { studentDetail } = useStudent();
     const [message, setMessage] = useState('');
     const queryClient = useQueryClient();
+    
     const socketRef = useRef(null);
 
     const wsUrl = `ws://127.0.0.1:8000/ws/chat/${groupName}/`;
