@@ -13,7 +13,7 @@ const Subject = () => {
     isError,
   } = useCustomQuery(
     ["lessons", subject],
-    `http://127.0.0.1:8000/lessons?subject=${subject}&teacher_id=${teacherId}`
+    `https://lms-api-xi.vercel.app/lessons?subject=${subject}&teacher_id=${teacherId}`
   );
   const [addLesson, setAddLesson] = useState(false);
 

@@ -1,44 +1,43 @@
-import React, { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
-function LessonForm({teacherId}) {
-  const classSet = localStorage.getItem('classSet');
-  const classes = [...JSON.parse(classSet)]
-  const subjectSet = localStorage.getItem('subjectSet');
-  const subjects = [...JSON.parse(subjectSet)]
-  const [selectedClass, setSelectedClass] = useState('');
-  const [subject, setSubject] = useState('');
-  const [topic, setTopic] = useState('');
-  const [content, setContent] = useState('');
+function LessonForm({ teacherId }) {
+  const classSet = localStorage.getItem("classSet");
+  const classes = [...JSON.parse(classSet)];
+  const subjectSet = localStorage.getItem("subjectSet");
+  const subjects = [...JSON.parse(subjectSet)];
+  const [selectedClass, setSelectedClass] = useState("");
+  const [subject, setSubject] = useState("");
+  const [topic, setTopic] = useState("");
+  const [content, setContent] = useState("");
   const [hasQuiz, setHasQuiz] = useState(false);
   const [quiz, setQuiz] = useState([]);
   const [hasVideo, setHasVideo] = useState(false);
-  const [video, setVideo] = useState('');
-  const [dateCreated, setDateCreated] = useState('');
-
+  const [video, setVideo] = useState("");
+  const [dateCreated, setDateCreated] = useState("");
 
   const mutation = useMutation({
     mutationFn: async (newLessonData) => {
-      const response = await fetch('http://127.0.0.1:8000/lessons/', {
-        method: 'POST',
+      const response = await fetch("https://lms-api-xi.vercel.app/lessons/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(newLessonData),
       });
-    
+
       if (!response.ok) {
-        throw new Error('Failed to create lesson');
+        throw new Error("Failed to create lesson");
       }
-    
+
       return response.json();
     },
     onError: (error) => {
-      alert(error.message)
+      alert(error.message);
     },
     onSuccess: (data) => {
-      alert('Successfully created lesson')
-    }
+      alert("Successfully created lesson");
+    },
   });
 
   const handleSubmit = (e) => {
@@ -64,24 +63,28 @@ function LessonForm({teacherId}) {
     <form onSubmit={handleSubmit}>
       <div>
         <label>Class</label>
-        <select name="" id="" onChange={(e) => setSelectedClass(e.target.value)}>
+        <select
+          name=""
+          id=""
+          onChange={(e) => setSelectedClass(e.target.value)}
+        >
           <option value="">Select Class</option>
-          {
-            classes && classes.map(_class => (
-              <option value={_class} key={_class}>{_class}</option>
-            ))
-          }
+          {classes &&
+            classes.map((_class) => (
+              <option value={_class} key={_class}>
+                {_class}
+              </option>
+            ))}
         </select>
       </div>
       <div>
         <label>Subject:</label>
         <select name="" id="" onChange={(e) => setSubject(e.target.value)}>
           <option value="">Select a subject</option>
-          {
-            subjects && subjects.map(subject => (
+          {subjects &&
+            subjects.map((subject) => (
               <option value={subject}>{subject}</option>
-            ))
-          }
+            ))}
         </select>
       </div>
       <div>
@@ -144,7 +147,7 @@ function LessonForm({teacherId}) {
         />
       </div>
       <button type="submit" disabled={mutation.isLoading}>
-        {mutation.isLoading ? 'Creating...' : 'Create Lesson'}
+        {mutation.isLoading ? "Creating..." : "Create Lesson"}
       </button>
       {mutation.error && <div>Error: {mutation.error.message}</div>}
     </form>

@@ -20,7 +20,7 @@ const Course = () => {
     error: courseError,
   } = useCustomQuery(
     ["course", courseId],
-    `http://127.0.0.1:8000/course/${courseId}`
+    `https://lms-api-xi.vercel.app/course/${courseId}`
   );
   const {
     data: modules,
@@ -29,14 +29,15 @@ const Course = () => {
     error: moduleError,
   } = useCustomQuery(
     ["course", courseId, class_details.id],
-    `http://127.0.0.1:8000/class/${class_details.id}/courses/${courseId}/modules`
+    `https://lms-api-xi.vercel.app/class/${class_details.id}/courses/${courseId}/modules`
   );
 
   if (courseIsLoading || moduleIsLoading) return <div>Fetching data...</div>;
   if (courseIsError || moduleIsError)
     return (
       <div>
-        Error fetching data due to: {courseError?.message || moduleError?.message}
+        Error fetching data due to:{" "}
+        {courseError?.message || moduleError?.message}
       </div>
     );
 
@@ -45,15 +46,21 @@ const Course = () => {
       {/* Left Section: Course Overview */}
       <div className="w-full md:w-2/3 space-y-6">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-800">{course_detail.title}</h1>
+          <h1 className="text-3xl font-semibold text-gray-800">
+            {course_detail.title}
+          </h1>
           <p className="text-gray-600">{course_detail.description}</p>
         </div>
 
         {/* Tabs (Description, Syllabus) */}
         <div className="border-b border-gray-200">
           <ul className="flex space-x-6">
-            <li className="text-blue-600 border-b-2 border-blue-600 pb-2">Syllabus</li>
-            <li className="text-gray-600 hover:text-blue-600 cursor-pointer">Description</li>
+            <li className="text-blue-600 border-b-2 border-blue-600 pb-2">
+              Syllabus
+            </li>
+            <li className="text-gray-600 hover:text-blue-600 cursor-pointer">
+              Description
+            </li>
           </ul>
         </div>
 
@@ -73,7 +80,9 @@ const Course = () => {
                 </div>
                 <div
                   className={`px-4 py-2 transition-all duration-300 ${
-                    activeIndex === index ? "max-h-screen" : "max-h-0 overflow-hidden"
+                    activeIndex === index
+                      ? "max-h-screen"
+                      : "max-h-0 overflow-hidden"
                   }`}
                 >
                   <LessonList
@@ -109,8 +118,12 @@ const Course = () => {
           <div className="bg-white shadow-md rounded-lg p-4 space-y-4">
             <div className="flex items-center space-x-2">
               <span className="text-xl text-yellow-500">★</span>
-              <span className="text-lg font-medium">{course_detail.rating}</span>
-              <span className="text-gray-600">({course_detail.reviews} reviews)</span>
+              <span className="text-lg font-medium">
+                {course_detail.rating}
+              </span>
+              <span className="text-gray-600">
+                ({course_detail.reviews} reviews)
+              </span>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
@@ -118,11 +131,15 @@ const Course = () => {
                 <p className="text-gray-600 text-sm">Students</p>
               </div>
               <div className="text-center">
-                <h6 className="text-lg font-medium text-gray-800">Intermediate</h6>
+                <h6 className="text-lg font-medium text-gray-800">
+                  Intermediate
+                </h6>
                 <p className="text-gray-600 text-sm">Level</p>
               </div>
               <div className="text-center">
-                <h6 className="text-lg font-medium text-gray-800">12 Modules</h6>
+                <h6 className="text-lg font-medium text-gray-800">
+                  12 Modules
+                </h6>
                 <p className="text-gray-600 text-sm">Total</p>
               </div>
               <div className="text-center">

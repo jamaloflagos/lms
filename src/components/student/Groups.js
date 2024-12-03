@@ -8,8 +8,8 @@ const Groups = () => {
   const { studentDetail } = useStudent();
   const [message, setMessage] = useState("");
   const [showCreategroup, setShowCreateGroup] = useState(false);
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
   const queryClient = useQueryClient();
   const {
     data: groups_in,
@@ -17,7 +17,7 @@ const Groups = () => {
     isError: inIsError,
   } = useCustomQuery(
     ["groups_in"],
-    `http://127.0.0.1:8000/students/${studentDetail.id}/groups?status=member`
+    `https://lms-api-xi.vercel.app/students/${studentDetail.id}/groups?status=member`
   );
   const {
     data: groups_not_in,
@@ -25,14 +25,14 @@ const Groups = () => {
     isError: notIsError,
   } = useCustomQuery(
     ["groups_not_in"],
-    `http://127.0.0.1:8000/students/${studentDetail.id}/groups?status=non-member`
+    `https://lms-api-xi.vercel.app/students/${studentDetail.id}/groups?status=non-member`
   );
 
   const joinMutation = useMutation({
     mutationFn: async (groupId) => {
       console.log(groupId);
       const response = await fetch(
-        `http://127.0.0.1:8000/groups/${groupId}/${studentDetail.id}`,
+        `https://lms-api-xi.vercel.app/groups/${groupId}/${studentDetail.id}`,
         {
           method: "PATCH",
           headers: {
@@ -61,36 +61,33 @@ const Groups = () => {
 
   const createMutation = useMutation({
     mutationFn: async (newGroupData) => {
-        const response = await fetch(
-            `http://127.0.0.1:8000/groups`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(newGroupData),
-            }
-          );
-    
-          if (!response.ok) {
-            // if (response.status === 400) {
-            //   throw new Error('Applicant email already exist');
-            // }
-            throw new Error("Error joining group");
-          }
-    
-          return response.json();
+      const response = await fetch(`https://lms-api-xi.vercel.app/groups`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newGroupData),
+      });
+
+      if (!response.ok) {
+        // if (response.status === 400) {
+        //   throw new Error('Applicant email already exist');
+        // }
+        throw new Error("Error joining group");
+      }
+
+      return response.json();
     },
     onSuccess: () => {
-        setShowCreateGroup(prev => !prev);
-        setName('');
-        setDesc('');
-        queryClient.refetchQueries(["groups_in", "groups_not_in"]);
+      setShowCreateGroup((prev) => !prev);
+      setName("");
+      setDesc("");
+      queryClient.refetchQueries(["groups_in", "groups_not_in"]);
     },
     onError: (error) => {
-        setMessage(error.message);
-    }
-  })
+      setMessage(error.message);
+    },
+  });
 
   const handleJoin = (groupId) => {
     console.log(groupId);
@@ -98,15 +95,15 @@ const Groups = () => {
   };
 
   const handleCreateGroup = (e) => {
-     e.preventDefault();
+    e.preventDefault();
 
-     const newGroupData = {
-        name,
-        desc,
-        creator: studentDetail.id
-     }
+    const newGroupData = {
+      name,
+      desc,
+      creator: studentDetail.id,
+    };
     createMutation.mutate(newGroupData);
-  }
+  };
 
   if (inIsLoading || notIsLoading)
     return <div className="text-white">Loading groups data...</div>;
@@ -116,7 +113,10 @@ const Groups = () => {
   return (
     <div className="bg-[#0F2942] min-h-screen p-6">
       <div className="sticky top-10 flex start-5">
-        <button onClick={() => setShowCreateGroup((prev) => !prev)} className="bg-white w-60 text-center py-3">
+        <button
+          onClick={() => setShowCreateGroup((prev) => !prev)}
+          className="bg-white w-60 text-center py-3"
+        >
           Create New Study Group
         </button>
       </div>
@@ -175,14 +175,14 @@ const Groups = () => {
           </div>
 
           <form onSubmit={handleCreateGroup}>
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Group name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Description"
               value={desc}
               onChange={(e) => setDesc(e.target.value)}

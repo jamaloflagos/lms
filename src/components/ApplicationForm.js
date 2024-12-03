@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { useCustomQuery } from '../hooks/useCustomQuery';
+import React, { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useCustomQuery } from "../hooks/useCustomQuery";
 
-
-function generateApplicationId(prefix = 'APP') {
-  const randomChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function generateApplicationId(prefix = "APP") {
+  const randomChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let id = prefix;
   for (let i = 0; i < 7; i++) {
     id += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
@@ -12,51 +11,55 @@ function generateApplicationId(prefix = 'APP') {
   return id;
 }
 
-
 function ApplicantForm() {
-    const { data: classes, isLoading: classesLoading, isError } = useCustomQuery(['classes'], `http://127.0.0.1:8000/classes`);
-    const [selectedClass, setSelectedClass] = useState('');
-    const [message, setMessage] = useState('');
-    const [filteredClasses, setFilteredClasses] = useState([]);
+  const {
+    data: classes,
+    isLoading: classesLoading,
+    isError,
+  } = useCustomQuery(["classes"], `https://lms-api-xi.vercel.app/classes`);
+  const [selectedClass, setSelectedClass] = useState("");
+  const [message, setMessage] = useState("");
+  const [filteredClasses, setFilteredClasses] = useState([]);
   const [formData, setFormData] = useState({
     application_id: generateApplicationId(),
-    first_name: '',
-    last_name: '',
-    contact_mail: '',
-    address: '',
-    contact_phone: '',
-    parent_first_name: '',
-    parent_last_name: '',
-    parent_contact_mail: '',
-    parent_address: '',
-    parent_contact_phone: '',
-    class_applied_for: selectedClass
+    first_name: "",
+    last_name: "",
+    contact_mail: "",
+    address: "",
+    contact_phone: "",
+    parent_first_name: "",
+    parent_last_name: "",
+    parent_contact_mail: "",
+    parent_address: "",
+    parent_contact_phone: "",
+    class_applied_for: selectedClass,
   });
-
 
   const mutation = useMutation({
     mutationFn: async (applicantData) => {
-      const response = await fetch('http://127.0.0.1:8000/applicants/', { 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(applicantData),
-      });
-    
+      const response = await fetch(
+        "https://lms-api-xi.vercel.app/applicants/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(applicantData),
+        }
+      );
+
       if (!response.ok) {
         if (response.status === 400) {
-          throw new Error('Applicant email already exist');
+          throw new Error("Applicant email already exist");
         }
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
-    
-      return response.json();
 
-    }, 
+      return response.json();
+    },
     onError: (error) => {
       setMessage(error.message);
-    }
+    },
   });
 
   const handleClassSearch = (e) => {
@@ -69,7 +72,7 @@ function ApplicantForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -77,26 +80,26 @@ function ApplicantForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
     mutation.mutate(formData);
   };
 
   useEffect(() => {
     if (classes) {
-        setFilteredClasses(classes);
+      setFilteredClasses(classes);
     }
   }, [classes]);
 
   useEffect(() => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      class_applied_for: selectedClass
+      class_applied_for: selectedClass,
     }));
   }, [selectedClass]);
 
-  if (classesLoading) return <div>Loading....</div>
-  if (isError) return <div>Error fetching data</div>
-  if (mutation.isSuccess) return <div>You have successfully applied!</div>
+  if (classesLoading) return <div>Loading....</div>;
+  if (isError) return <div>Error fetching data</div>;
+  if (mutation.isSuccess) return <div>You have successfully applied!</div>;
 
   return (
     <form onSubmit={handleSubmit}>

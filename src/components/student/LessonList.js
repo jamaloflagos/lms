@@ -8,7 +8,7 @@ const LessonList = ({ courseId, classId, moduleId }) => {
     error,
   } = useCustomQuery(
     ["course", courseId, classId, moduleId],
-    `http://127.0.0.1:8000/class/${classId}/courses/${courseId}/modules/${moduleId}/lessons`
+    `https://lms-api-xi.vercel.app/class/${classId}/courses/${courseId}/modules/${moduleId}/lessons`
   );
 
   if (isLoading) return <div>Laoding data...</div>;

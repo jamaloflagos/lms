@@ -12,7 +12,7 @@ const Student = () => {
     error,
   } = useCustomQuery(
     ["student", userId],
-    `http://127.0.0.1:8000/students/${userId}`
+    `https://lms-api-xi.vercel.app/students/${userId}`
   );
   const [subject, setSubject] = useState(null);
 

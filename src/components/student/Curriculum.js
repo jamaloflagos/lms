@@ -4,7 +4,7 @@ import { useStudent } from "../../hooks/useStudent";
 
 const Curriculum = () => {
   const { studentDetail } = useStudent();
-  
+
   const {
     data: courses,
     isLoading,
@@ -12,7 +12,7 @@ const Curriculum = () => {
     error,
   } = useCustomQuery(
     ["courses", studentDetail.class_details.id],
-    `http://127.0.0.1:8000/class/${studentDetail.class_details.id}/courses`
+    `https://lms-api-xi.vercel.app/class/${studentDetail.class_details.id}/courses`
   );
 
   if (isLoading) return <div>Loading data...</div>;
@@ -59,9 +59,7 @@ const Curriculum = () => {
                 <h4 className="text-lg font-medium text-gray-800">
                   {course.title}
                 </h4>
-                <p className="text-sm text-gray-600 mb-2">
-                  {course.creator}
-                </p>
+                <p className="text-sm text-gray-600 mb-2">{course.creator}</p>
 
                 {/* Modules and Total Hours */}
                 <div className="flex items-center justify-between text-sm text-gray-600">

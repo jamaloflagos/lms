@@ -15,7 +15,7 @@ const Login = () => {
 
   const mutation = useMutation({
     mutationFn: async (loginData) => {
-      const response = await fetch("http://127.0.0.1:8000/login/", {
+      const response = await fetch("https://lms-api-xi.vercel.app/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const Login = () => {
     },
     onSuccess: (data) => {
       if (user === "student") {
-        console.log(data)
+        console.log(data);
         setStudentId(data.id);
         setStudentDetail(data);
         localStorage.setItem("studentId", data.id);
