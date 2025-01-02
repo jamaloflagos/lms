@@ -7,14 +7,14 @@ export const StudentProvider = ({children}) => {
     const [studentId, setStudentId] = useState(localStorage.getItem('studentId'));
     const [studentDetail, setStudentDetail] = useState(JSON.parse(localStorage.getItem('studentDetail')));
 
-    const contextvalue = {
+    const contextValue = {
         studentId,
         setStudentId,
         studentDetail,
         setStudentDetail
     }
     return (
-        <StudentContext.Provider value={contextvalue}>
+        <StudentContext.Provider value={contextValue}>
             {children}
         </StudentContext.Provider>
     )

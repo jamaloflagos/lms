@@ -3,11 +3,10 @@ import StudentList from "../components/StudentList";
 
 const Attendance = () => {
     const { classId } = useParams(); 
-    console.log('in attendance');
   return (
-    <div>
+    <main>
         <StudentList classId={classId} context={'attendances'}/>
-    </div>
+    </main>
   )
 }
 export default Attendance

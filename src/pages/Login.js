@@ -39,7 +39,6 @@ const Login = () => {
     },
     onSuccess: (data) => {
       if (user === "student") {
-        console.log(data);
         setStudentId(data.id);
         setStudentDetail(data);
         localStorage.setItem("studentId", data.id);
@@ -53,7 +52,7 @@ const Login = () => {
     },
   });
 
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (!username || !password) {
       return setMessage("All input field required");
@@ -62,20 +61,20 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <main>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username</label>
+      <form onSubmit={onSubmit}>
+        <label htmlFor="username">
+          Username:
           <input
             type="text"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
+        </label>
+        <label htmlFor="password">
+          Password
           <div>
             <input
               type={showPassword ? "text" : "password"}
@@ -90,12 +89,12 @@ const Login = () => {
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
-        </div>
+        </label>
         {message && <h1>{message}</h1>}
         <button type="submit">Login</button>
       </form>
       <Link to="/">Go back home</Link>
-    </div>
+    </main>
   );
 };
 

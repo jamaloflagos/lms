@@ -70,7 +70,7 @@ function ApplicantForm() {
     setFilteredClasses(filteredClasses);
   };
 
-  const handleChange = (e) => {
+  const onChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -78,7 +78,7 @@ function ApplicantForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
     mutation.mutate(formData);
@@ -102,163 +102,138 @@ function ApplicantForm() {
   if (mutation.isSuccess) return <div>You have successfully applied!</div>;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Application ID:
-          <input
-            type="text"
-            name="application_id"
-            value={formData.application_id}
-            readOnly
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          First Name:
-          <input
-            type="text"
-            name="first_name"
-            value={formData.first_name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="last_name"
-            value={formData.last_name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Contact Mail:
-          <input
-            type="email"
-            name="contact_mail"
-            value={formData.contact_mail}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Address:
-          <textarea
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Contact Phone:
-          <input
-            type="text"
-            name="contact_phone"
-            value={formData.contact_phone}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>Class Applying For:</label>
+    <form onSubmit={onSubmit}>
+      <label>
+        Application ID:
+        <input
+          type="text"
+          name="application_id"
+          value={formData.application_id}
+          readOnly
+        />
+      </label>
+      <label>
+        First Name:
+        <input
+          type="text"
+          name="first_name"
+          value={formData.first_name}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Last Name:
+        <input
+          type="text"
+          name="last_name"
+          value={formData.last_name}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Contact Mail:
+        <input
+          type="email"
+          name="contact_mail"
+          value={formData.contact_mail}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Address:
+        <textarea
+          name="address"
+          value={formData.address}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Contact Phone:
+        <input
+          type="text"
+          name="contact_phone"
+          value={formData.contact_phone}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Class Applying For:
         <input
           type="text"
           placeholder="Search class..."
           onChange={handleClassSearch}
         />
-        <div>
-          {filteredClasses.map((_class) => (
-            <div key={_class.id}>
-              <input
-                type="radio"
-                value={_class.id}
-                checked={selectedClass === _class.id}
-                onChange={(e) => setSelectedClass(_class.id)}
-              />
-              {_class.name}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div>
-        <label>
-          Parent First Name:
-          <input
-            type="text"
-            name="parent_first_name"
-            value={formData.parent_first_name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Parent Last Name:
-          <input
-            type="text"
-            name="parent_last_name"
-            value={formData.parent_last_name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Parent Contact Mail:
-          <input
-            type="email"
-            name="parent_contact_mail"
-            value={formData.parent_contact_mail}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Parent Address:
-          <textarea
-            name="parent_address"
-            value={formData.parent_address}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Parent Contact Phone:
-          <input
-            type="text"
-            name="parent_contact_phone"
-            value={formData.parent_contact_phone}
-            onChange={handleChange}
-            required
-          />
-        </label>
-      </div>
+      </label>
+        {filteredClasses.map((_class) => (
+          <label key={_class.id}>
+            <input
+              type="radio"
+              value={_class.id}
+              checked={selectedClass === _class.id}
+              onChange={(e) => setSelectedClass(_class.id)}
+            />
+            {_class.name}
+          </label>
+        ))}
+      <label>
+        Parent First Name:
+        <input
+          type="text"
+          name="parent_first_name"
+          value={formData.parent_first_name}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Parent Last Name:
+        <input
+          type="text"
+          name="parent_last_name"
+          value={formData.parent_last_name}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Parent Contact Mail:
+        <input
+          type="email"
+          name="parent_contact_mail"
+          value={formData.parent_contact_mail}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Parent Address:
+        <textarea
+          name="parent_address"
+          value={formData.parent_address}
+          onChange={onChange}
+          required
+        />
+      </label>
+      <label>
+        Parent Contact Phone:
+        <input
+          type="text"
+          name="parent_contact_phone"
+          value={formData.parent_contact_phone}
+          onChange={onChange}
+          required
+        />
+      </label>
       {message && <p>{message}</p>}
       <button type="submit" disabled={mutation.isLoading}>
         Submit
       </button>
       {mutation.isLoading && <p>Submitting...</p>}
-      {/* {mutation.isError && <p>Error: {mutation.error.message}</p>} */}
     </form>
   );
 }

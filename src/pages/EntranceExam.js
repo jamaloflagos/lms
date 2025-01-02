@@ -58,7 +58,7 @@ const EntranceExam = () => {
     return <div>You have successfully anser your entrance exam</div>;
 
   return (
-    <div>
+    <main>
       <div style={{ color: getColor() }}>{formatTime(timer)}</div>
       <Questions
         applicantId={applicantId}
@@ -67,7 +67,7 @@ const EntranceExam = () => {
         context={"entrance-exam"}
         setSubmitted={setSubmitted}
       />
-    </div>
+    </main>
   );
 };
 

@@ -74,6 +74,8 @@ const Course = () => {
                   className="p-4 bg-gray-100 cursor-pointer flex justify-between items-center"
                 >
                   <span className="text-gray-800 font-medium">
+
+                    
                     {module.title}
                   </span>
                   <span>{activeIndex === index ? "-" : "+"}</span>

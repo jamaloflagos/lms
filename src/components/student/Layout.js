@@ -1,20 +1,26 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { useStudent } from "../../hooks/useStudent";
+import Header from "./Header";
+import { useState } from "react";
 
 const Layout = () => {
-  const { studentDetail } = useStudent();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <div>
-      <div className="flex h-screen bg-lp-blue  overflow-y-auto relative">
-        <Sidebar />
-        <div className="flex-grow">
-          <div className="bg-white flex justify-between px-12 h-12 pt-2 sticky top-0">
-            <h4>{studentDetail.first_name}</h4>
-            <i class="fa-solid fa-bell"></i>
+    <div className="">
+      <div className={`${isSidebarOpen ? "grid grid-cols-[1fr_3fr] grid-rows-[auto_1fr] h-screen" : ""}`}>
+        {isSidebarOpen ? (
+          <div className={`${isSidebarOpen ? "row-span-2" : ""} bg-blue-900 text-white`}>
+            <Sidebar setIsSidebarOpen={setIsSidebarOpen} />
           </div>
-          <Outlet />
+        ) : (
+          <button onClick={() => setIsSidebarOpen((val) => !val)} className="absolute top-5 left-5">Open</button>
+        )}
+        <div className={`${isSidebarOpen ? "col-start-2" : ""}`}>
+        <Header />
         </div>
+        <main className={`${isSidebarOpen ? "col-start-2" : ""} h-full`}>
+          <Outlet />
+        </main>
       </div>
     </div>
   );

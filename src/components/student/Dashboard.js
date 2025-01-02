@@ -45,7 +45,7 @@ const Dashboard = () => {
     return <div>Error fetching data</div>;
 
   return (
-    <div className="h-screen p-10 bg-lp-blue">
+    <div className="h-full p-10 bg-lp-blue">
       {/* Header Section */}
       <div className="pb-8">
         <h3 className="text-3xl font-semibold">

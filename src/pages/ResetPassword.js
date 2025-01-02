@@ -48,10 +48,9 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <main>
+      <h1>Reset Password</h1>
       <form onSubmit={handleSubmit}>
-
         <div>
           <label htmlFor="password">Password</label>
           <div>
@@ -89,10 +88,10 @@ const ResetPassword = () => {
         </div>
         {message && <p>{message}</p>}
         <button type="submit">
-          Login
+          Save
         </button>
       </form>
-    </div>
+    </main>
   );
 };
 

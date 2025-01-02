@@ -19,7 +19,7 @@ const Curriculum = () => {
   if (isError) return <div>Error fetching data due to {error.message}</div>;
 
   return (
-    <div className="pt-20 px-12">
+    <div className="pt-20 px-12 h-full bg-lp-blue">
       {/* Heading Section */}
       <div className="pb-8">
         <h3 className="text-3xl font-semibold text-gray-800">Curriculum</h3>

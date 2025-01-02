@@ -3,7 +3,7 @@ import { useStudent } from "../../hooks/useStudent";
 const Reports = () => {
   const { studentDetail } = useStudent();
   return (
-    <div>
+    <div className="h-full p-10 bg-lp-blue">
       <h3>Results & reports</h3>
       <p></p>
       <div>

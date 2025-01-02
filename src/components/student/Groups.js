@@ -111,8 +111,8 @@ const Groups = () => {
     return <div className="text-red-500">Error loading groups data...</div>;
 
   return (
-    <div className="bg-[#0F2942] min-h-screen p-6">
-      <div className="sticky top-10 flex start-5">
+    <div className="bg-lp-blue min-h-screen p-6">
+      <div className="sticky top-10 left-0 flex start-5">
         <button
           onClick={() => setShowCreateGroup((prev) => !prev)}
           className="bg-white w-60 text-center py-3"
