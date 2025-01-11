@@ -7,10 +7,13 @@ const initialState = studentAdapter.getInitialState();
 const studentApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getStudents: builder.query({
-      query: ({ class_id }) => ({
-        url: "students",
-        params: { class_id }
-      }),
+      query: (classId) => {
+        const params = classId ? { class_id: classId } : {}
+        return {
+          url: "students",
+          params
+        }
+      },
       transformResponse: (responseData) => {
         return studentAdapter.setAll(initialState, responseData);
       },
@@ -58,7 +61,7 @@ const studentApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetStudentQuery,
+  useGetStudentsQuery,
   useAddNewStudentMutation,
   useUpdateStudentMutation,
   useDeleteStudentMutation,

@@ -3,7 +3,7 @@ import { useDeleteTeacherMutation, useUpdateTeacherMutation } from "./teachersAp
 import { useEffect, useState } from "react";
 import DeletePromptModal from "../../components/DeletePromptModal";
 
-const EditTeacherForm = ({ teacher, classes }) => {
+const EditTeacherForm = ({ teacher, allClasses, filteredClasses, sch_subjects, setSubjectId }) => {
   const navigate = useNavigate();
   const [updateTeacher, { isLoading, isSuccess, isError, error }] =
     useUpdateTeacherMutation(); 
@@ -67,11 +67,23 @@ const EditTeacherForm = ({ teacher, classes }) => {
   }, [isSuccess, navigate, isDelSuccess]);
 
   // Class options for dropdown
-  const classOptions = classes.map((_class) => (
-    <option value={_class.name} key={_class.id}>
+  const filteredClassesOptions = filteredClasses?.map((_class) => (
+    <option value={_class.id} key={_class.id}>
       {_class.name}
     </option>
   ));
+
+  const allClassesOptions = allClasses?.map((_class) => (
+    <option value={_class.id} key={_class.id}>
+      {_class.name}
+    </option>
+  ));
+
+  const subjectOptions = sch_subjects?.map(subject => (
+    <option value={subject.id} key={subject.id}>
+      {subject.name}
+    </option>
+  ))
 
   const onSubjectClassesChange = (e, index, field) => {
     const options = Array.from(e.target.selectedOptions);
@@ -99,6 +111,8 @@ const EditTeacherForm = ({ teacher, classes }) => {
             } else return subject
         })
     })
+
+    setSubjectId(value)
   }
 
   const addSubject = () => {
@@ -115,29 +129,34 @@ const EditTeacherForm = ({ teacher, classes }) => {
 
   const errContent = (error?.data?.message || delError?.data?.message) ?? ""
 
-  const teacherSubjects = subjects.map((subject, index) => (
-    <div>
+  const teacherSubjects = subjects?.map((subject, index) => (
+    <div key={index}>
       <label htmlFor="subject_name">
         Subjects Name:
-        <input
-          type="text"
+        <select
           id="subject_name"
           value={subject.name}
-          onChange={(e) => onSubjectNameChange(index, 'name', e.target.value)}
-        />
+          onChange={(e) => onSubjectNameChange(index, "subject_id", e.target.value)}
+        >
+          <option value="">Select Subject</option>
+          {subjectOptions}
+        </select>
       </label>
+
       <label htmlFor="classes">
         Classes:
         <select
           id="classes"
           value={subject.classes}
-          onChange={(e) => onSubjectClassesChange(e, index, 'classes')}
+          onChange={(e) => onSubjectClassesChange(e, index, "classes_ids")}
           multiple
         >
-          {classOptions}
+          <option value="">Select Classes</option>
+          {filteredClassesOptions}
         </select>
       </label>
-      <button onClick={removeSubject(index)}>-</button>
+      {/* <div>{subject.classes.join(' ,')}</div> */}
+      <button type="button" onClick={() => removeSubject(index)}>-</button>
     </div>
   ));
 
@@ -205,7 +224,7 @@ const EditTeacherForm = ({ teacher, classes }) => {
             onChange={(e) => setFormClass(e.target.value)}
           >
             <option value="">Select a class</option>
-            {classOptions}
+            {allClassesOptions}
           </select>
         </label>
       </form>

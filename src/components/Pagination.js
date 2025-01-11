@@ -24,7 +24,7 @@ const Pagination = ({ totalQuestions, questionsPerPage, paginate, currentPage })
           {currentPage > 1 && <button onClick={prev}>Prev</button>}
           {
             pageNumbers.map(number => (
-              <li key={number}>
+              <li key={number} style={{display: 'inline'}}>
                 <button 
                   onClick={() => paginate(number)}
                   style={{ fontWeight: currentPage === number ? 'bold' : 'normal' }}

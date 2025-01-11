@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { useGetClassesQuery } from "./classesApiSlice"
 
 const ClassesList = () => {
-    const { classes = [], isLoading, isSuccess, isError, error} = useGetClassesQuery('classesList', {
+    const { classes = [], isLoading, isSuccess, isError, error} = useGetClassesQuery(undefined, {
         selectFromResult: (result) => {
             const classes = Object.values(result?.data?.entities || {})
             return {
@@ -20,7 +20,7 @@ const ClassesList = () => {
     if (isSuccess) {
         const listItems = classes.map(_class => (
             <li key={_class.id}>
-                <Link to={`classes/${_class.id}`}>
+                <Link to={`${_class.id}`}>
                     <span>{_class.name} ({_class.category})</span>
                     <span>{_class.students}</span>
                 </Link>

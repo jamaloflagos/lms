@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Footer from "./Footer";
 
 const Public = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
@@ -15,15 +16,23 @@ const Public = () => {
 
   return (
     <>
-      <header className={`absolute top-0 left-0 h-full w-fit sm:w-full sm:h-fit bg-yellow`}>
+      <header
+        className={`absolute top-0 left-0 h-full w-fit sm:w-full sm:h-fit bg-yellow`}
+      >
         <button
-          className={`absolute top-5 ${isSidebarOpen ? "right-0" : "left-5"} sm:hidden`}
+          className={`absolute top-5 ${
+            isSidebarOpen ? "right-0" : "left-5"
+          } sm:hidden`}
           onClick={() => setIsSidebarOpen((val) => !val)}
         >
           Menu
         </button>
 
-        <div className={`${isSidebarOpen ? "block" : "hidden"} mt-12 w-52 pl-2 sm:w-full sm:p-2 sm:mt-0 sm:flex justify-between`}>
+        <div
+          className={`${
+            isSidebarOpen ? "block" : "hidden"
+          } mt-12 w-52 pl-2 sm:w-full sm:p-2 sm:mt-0 sm:flex justify-between`}
+        >
           <Link to="/">
             <h1 className="navbar-brand">Your School Name</h1>
           </Link>
@@ -34,7 +43,7 @@ const Public = () => {
               </li>
 
               <li
-              className="relative"
+                className="relative"
                 onMouseEnter={() => handleMouseEnter("student")}
                 onMouseLeave={handleMouseLeave}
               >
@@ -76,7 +85,7 @@ const Public = () => {
               </li>
 
               <li
-              className="relative"
+                className="relative"
                 onMouseEnter={() => handleMouseEnter("admin")}
                 onMouseLeave={handleMouseLeave}
               >
@@ -106,14 +115,19 @@ const Public = () => {
       <main className="p-12 sm:pt-24">
         <article className="sm:flex gap-10">
           <section className="mb-4 sm:w-2/4">
-            <h1>Welcome to <span className="font-bold">My School</span></h1>
+            <h1>
+              Welcome to <span className="font-bold">My School</span>
+            </h1>
             <p className="my-4">
               Our school is committed to providing a high-quality education that
               fosters academic excellence, character development, and lifelong
               learning.
             </p>
             {/* <button className="cta-button"><Link className="cta-button" to="/apply/">Apply Now</Link></button> */}
-            <Link className="text-white bg-md-blue p-3 rounded-md block w-fit" to="/apply/">
+            <Link
+              className="text-white bg-md-blue p-3 rounded-md block w-fit"
+              to="application"
+            >
               Apply Now
             </Link>
           </section>
@@ -127,22 +141,7 @@ const Public = () => {
         </article>
       </main>
 
-      <footer className="footer">
-        <ul className="footer-links">
-          <li>
-            <Link to="/about/principal">About the Principal</Link>
-          </li>
-          <li>
-            <Link to="/about/school">About the School</Link>
-          </li>
-          <li>
-            <Link to="/contact">Contact Us</Link>
-          </li>
-          <li>
-            <Link to="/privacy">Privacy Policy</Link>
-          </li>
-        </ul>
-      </footer>
+      <Footer />
     </>
   );
 };

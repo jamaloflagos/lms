@@ -1,4 +1,7 @@
+import { memo } from "react"
+
 const Question = ({ question, selectedAnswers, handleAnswerChange, questionIndex }) => {
+  const questionNumber = questionIndex + 1
   const options = (
     question.options.map((option, i) => (
       <label key={i}>
@@ -16,7 +19,7 @@ const Question = ({ question, selectedAnswers, handleAnswerChange, questionIndex
 
   const content = (
     <div className='question'>
-        <h3>{question.question}</h3>
+        <h3>{questionNumber}. {question.question}</h3>
         <div>
           {options}
         </div>
@@ -25,4 +28,4 @@ const Question = ({ question, selectedAnswers, handleAnswerChange, questionIndex
 
   return content
 }
-export default Question
+export default memo(Question)

@@ -21,11 +21,9 @@ import { Route, Routes } from "react-router-dom";
 import PersistLogin from "./features/auth/PersistLogin";
 import RequireAuth from "./features/auth/RequireAuth";
 import { ROLES } from "./config/roles";
-import StudentLayout from "./dashboards/student/StudentLayout";
 import CoursesList from "./features/courses/CoursesList";
 import Course from "./components/student/Course";
 import StudentDashboard from "./dashboards/student/StudentDashboard";
-import TeacherLayout from "./dashboards/teacher/TeacherLayout";
 import TeacherDashboard from "./dashboards/teacher/TeacherDashboard";
 import EditCourse from "./features/courses/EditCourse";
 import NewCourse from "./features/courses/NewCourse";
@@ -34,7 +32,6 @@ import EditLesson from "./features/lessons/EditLesson";
 import NewModule from "./features/modules/NewModule";
 import EditModule from "./features/modules/EditModule";
 import AdminDashboard from "./dashboards/admin/AdminDashboard";
-import AdminLayout from "./dashboards/admin/AdminLayout";
 import TeachersList from "./features/teachers/TeachersList";
 import EditTeacher from "./features/teachers/EditTeacher";
 import NewTeacher from "./features/teachers/NewTeacher";
@@ -46,14 +43,21 @@ import GroupsList from "./features/groups/GroupsList";
 import Group from "./features/groups/Group";
 import NewGroup from "./features/groups/NewGroup";
 import EditGroup from "./features/groups/EditGroup";
-import Layout from "./components/Layout";
+import AppLayout from "./components/AppLayout";
 import Public from "./components/Public";
 import Login from "./components/Login";
-import Application from "./components/Application";
 import Lesson from "./features/lessons/Lesson";
 import Teacher from "./features/teachers/Teacher";
+import Application from "./features/applicants/Application";
+import ApplicantDashboard from "./dashboards/applicant/ApplicantDashboard";
+import EntranceExam from "./features/applicants/EntanceExam";
+import UserLayout from "./components/UserLayout";
 
 function App() {
+  const studentUrlSegments = ["dashboard", "subjects"];
+  const applicantUrlSegments = ["dashboard"];
+  const adminUrlSegments = ["dashboard", "classes", "teachers"];
+  const teacherUrlSegments = ["dashboard"];
   // const { studentId } = useStudent();
   return (
     // <div className="h-screen relative">
@@ -101,14 +105,26 @@ function App() {
     //   </BrowserRouter>
     // </div>
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={<AppLayout />}>
         <Route index element={<Public />} />
         <Route path="login" element={<Login />} />
         <Route path="application" element={<Application />} />
-        
+
         <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth allowedRole={[ROLES.Applicant]} />}>
+            <Route
+              path="applicant"
+              element={<UserLayout urlSegments={applicantUrlSegments} />}
+            >
+              <Route path="dashboard" element={<ApplicantDashboard />} />
+              <Route path=":id/entrance_exam" element={<EntranceExam />} />
+            </Route>
+          </Route>
           <Route element={<RequireAuth allowedRole={[ROLES.Student]} />}>
-            <Route path="student" element={<StudentLayout />}>
+            <Route
+              path="student"
+              element={<UserLayout urlSegments={studentUrlSegments} />}
+            >
               <Route path="dashboard" element={<StudentDashboard />} />
               <Route path="courses" element={<CoursesList />} />
               <Route path="courses/:id" element={<Course />} />
@@ -121,7 +137,10 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRole={[ROLES.Teacher]} />}>
-            <Route path="teacher" element={<TeacherLayout />}>
+            <Route
+              path="teacher"
+              element={<UserLayout urlSegments={teacherUrlSegments} />}
+            >
               <Route path="dashboard" element={<TeacherDashboard />} />
               <Route path="courses" element={<CoursesList />} />
               <Route path="courses/new" element={<NewCourse />} />
@@ -135,7 +154,10 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRole={[ROLES.Admin]} />}>
-            <Route path="admin" element={<AdminLayout />}>
+            <Route
+              path="admin"
+              element={<UserLayout urlSegments={adminUrlSegments} />}
+            >
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="teachers" element={<TeachersList />} />
               <Route path="teachers/new" element={<NewTeacher />} />

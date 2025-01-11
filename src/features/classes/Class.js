@@ -5,7 +5,7 @@ import StudentsList from "../students/StudentsList"
 const Class = () => {
   const { id } = useParams()
 
-  const { _class  } = useGetClassesQuery('classesList', {
+  const { _class  } = useGetClassesQuery(undefined, {
     selectFromResult: ({ data }) => ({
       _class: data?.entities[id]
     })
@@ -20,7 +20,7 @@ const Class = () => {
           <span>{_class.students}</span>
         </section>
         <section>
-          <StudentsList />
+          <StudentsList classId={_class.id}/>
         </section>
       </article>
     )

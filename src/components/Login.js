@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "../features/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
 import usePersist from "../hooks/usePersist"
+import Footer from "./Footer";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const Login = () => {
       setPersist(true);
 
       const { role } = jwtDecode(accessToken);
+      console.log(role)
       navigate(`/${role?.toLowerCase()}/dashboard`);
     } catch (err) {
       if (!err.status) {
@@ -53,8 +55,12 @@ const Login = () => {
   if (isLoading) return <p>Loading...</p>;
   const content = (
     <>
-      <p>{errMsg}</p>
+    <header>
+      <h1>Login</h1>
+    </header>
+    <main>
       <form onSubmit={onSubmit}>
+      <p>{errMsg}</p>
         <label htmlFor="username">Username:
           <input
             type="text"
@@ -73,6 +79,8 @@ const Login = () => {
         </label>
         <button>Login</button>
       </form>
+    </main>
+    <Footer />
     </>
   );
 

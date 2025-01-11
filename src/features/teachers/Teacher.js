@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { useGetTeachersQuery } from "./teachersApiSlice"
 
 const Teacher = () => {
@@ -8,13 +8,13 @@ const Teacher = () => {
             teacher: data?.entities[id]
         })
     })
-    console.log(teacher)
+    
     let content;
 
     if (teacher) {
         const listItems = (
             teacher.subjects.map(subject => (
-                <li>
+                <li key={subject.id}>
                     <span>{subject.name}</span>
                     <span>Classes taught: {subject.classes.join(', ')}</span>
                 </li>
@@ -24,6 +24,7 @@ const Teacher = () => {
             <div>
                 <div>
                     <span>{teacher.first_name} {teacher.last_name}</span>
+                    <Link to={`edit`}>Edit</Link>
                     {teacher.is_form_teacher && <span>Form Class: {teacher.form_class_details?.name}</span>}
                 </div>
                 <ul>

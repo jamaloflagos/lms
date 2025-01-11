@@ -2,17 +2,44 @@ import { useParams } from "react-router-dom";
 import { useGetClassesQuery } from "../classes/classesApiSlice";
 import { useGetTeachersQuery } from "./teachersApiSlice";
 import EditTeacherForm from "./EditTeacherForm";
+import { useState } from "react";
+import { useGetSubjectsQuery } from "../subjects/subjectsApiSlice";
 
 const EditTeacher = () => {
   const { id } = useParams();
-  const { classes } = useGetClassesQuery("classesList", {
+  const [subjectId, setSubjectId] = useState(1);
+  const { subjects = [] } = useGetSubjectsQuery("subjectsList", {
     selectFromResult: ({ data }) => {
-      const classes = Object.values(data?.entities).map((_class) => ({
-        id: _class.id,
-        title: _class.title,
+      const subjects = Object.values(data?.entities || {}).map((subject) => ({
+        id: subject.id,
+        name: subject.name,
       }));
 
-      return classes;
+      return {
+        subjects,
+      };
+    },
+  });
+  const { classes: filteredClasses = [] } = useGetClassesQuery(subjectId, {
+    selectFromResult: ({ data }) => {
+      const classes = Object.values(data?.entities || {}).map((_class) => ({
+        id: _class.id,
+        name: _class.name,
+      }));
+      return {
+        classes,
+      };
+    },
+  });
+  const { classes: allClasses = [] } = useGetClassesQuery(undefined, {
+    selectFromResult: ({ data }) => {
+      const classes = Object.values(data?.entities || {}).map((_class) => ({
+        id: _class.id,
+        name: _class.name,
+      }));
+      return {
+        classes,
+      };
     },
   });
 
@@ -22,7 +49,15 @@ const EditTeacher = () => {
     }),
   });
 
-  const content = <EditTeacherForm classes={classes} teacher={teacher} />;
+  const content = (
+    <EditTeacherForm
+      allClasses={allClasses}
+      filteredClasses={filteredClasses}
+      sch_subjects={subjects}
+      setSubjectId={setSubjectId}
+      teacher={teacher}
+    />
+  );
   return content;
 };
 export default EditTeacher;

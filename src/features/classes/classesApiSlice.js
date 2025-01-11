@@ -7,7 +7,13 @@ const initialState = classAdapter.getInitialState();
 const classApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getClasses: builder.query({
-      query: () => "/classes",
+      query: (subjectId) => {
+        const params = subjectId ? { subject_id: subjectId } : {};
+        return {
+          url: "classes",
+          params,
+        };
+      },
       transformResponse: (responseData) => {
         return classAdapter.setAll(initialState, responseData);
       },
@@ -22,60 +28,51 @@ const classApiSlice = apiSlice.injectEndpoints({
     }),
     addNewClass: builder.mutation({
       query: (initialClass) => {
-        console.log(initialClass)
+        console.log(initialClass);
         return {
           url: "/classes",
           method: "POST",
           body: {
             ...initialClass,
           },
-        }
+        };
       },
       invalidatesTags: [{ type: "Class", id: "LIST" }],
     }),
     updateClass: builder.mutation({
-      query: ({ id, ...rest}) => ({
+      query: ({ id, ...rest }) => ({
         url: `/classes/${id}`,
         method: "PATCH",
         body: {
           ...rest,
         },
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "Class", id: arg.id },
-      ],
+      invalidatesTags: (result, error, arg) => [{ type: "Class", id: arg.id }],
     }),
     deleteClass: builder.mutation({
-      query: ({id}) => ({
+      query: ({ id }) => ({
         url: `/classes/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "Class", id: arg.id },
-      ],
+      invalidatesTags: (result, error, arg) => [{ type: "Class", id: arg.id }],
     }),
   }),
 });
 
 export const {
-    useGetClassesQuery,
-    useAddNewClassMutation,
-    useUpdateClassMutation,
-    useDeleteClassMutation,
+  useGetClassesQuery,
+  useAddNewClassMutation,
+  useUpdateClassMutation,
+  useDeleteClassMutation,
 } = classApiSlice;
 
-const selectClassesResult =
-  classApiSlice.endpoints.getClasses.select();
+const selectClassesResult = classApiSlice.endpoints.getClasses.select();
 
 const selectClassesData = createSelector(
   selectClassesResult,
   (classesResult) => classesResult.data
 );
 
-export const { 
-    selectAll 
-} = classAdapter.getSelectors(
+export const { selectAll } = classAdapter.getSelectors(
   (state) => selectClassesData(state) ?? initialState
 );
-
-

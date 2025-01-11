@@ -40,15 +40,16 @@ const useAuth = () => {
 
     if (token) {
         const decoded = jwtDecode(token)
-        const { username, role, user_id } = decoded
+        const { username, role, user_id, class_id } = decoded
 
         isTeacher = role === "Teacher"
         isAdmin = role === "Admin"
+        // isStudent = role == "Student"
 
         if (isTeacher) status = "Teacher"
         if (isAdmin) status = "Admin"
 
-        return { username, role, user_id, isAdmin, isTeacher, status }
+        return { username, role, user_id, isAdmin, isTeacher, status, class_id }
     }
 
     return { username: '', role: '', isAdmin, isTeacher, status}
