@@ -1,12 +1,10 @@
-import { useParams } from "react-router-dom";
 import { useGetClassesQuery } from "../classes/classesApiSlice";
 import { useGetTeachersQuery } from "./teachersApiSlice";
 import EditTeacherForm from "./EditTeacherForm";
 import { useState } from "react";
 import { useGetSubjectsQuery } from "../subjects/subjectsApiSlice";
 
-const EditTeacher = () => {
-  const { id } = useParams();
+export const EditTeacher = ({ id }) => {
   const [subjectId, setSubjectId] = useState(1);
   const { subjects = [] } = useGetSubjectsQuery("subjectsList", {
     selectFromResult: ({ data }) => {
@@ -60,4 +58,3 @@ const EditTeacher = () => {
   );
   return content;
 };
-export default EditTeacher;

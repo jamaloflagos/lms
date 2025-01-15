@@ -2,7 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { useAddNewTeacherMutation } from "./teachersApiSlice";
 import { memo, useEffect, useState } from "react";
 
-const NewTeacherForm = ({ allClasses, filteredClasses, sch_subjects, setSubjectId }) => {
+const NewTeacherForm = ({
+  allClasses,
+  filteredClasses,
+  sch_subjects,
+  setSubjectId,
+}) => {
   const navigate = useNavigate();
   const [addNewTeacher, { isLoading, isSuccess, isError, error }] =
     useAddNewTeacherMutation();
@@ -18,7 +23,8 @@ const NewTeacherForm = ({ allClasses, filteredClasses, sch_subjects, setSubjectI
   const [isFormTeacher, setIsFormTeacher] = useState(false);
   const [form_class, setFormClass] = useState("");
   const canSave =
-    [firstName, lastName, email, subjects?.length > 0].every(Boolean) && !isLoading;
+    [firstName, lastName, email, subjects?.length > 0].every(Boolean) &&
+    !isLoading;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -68,11 +74,11 @@ const NewTeacherForm = ({ allClasses, filteredClasses, sch_subjects, setSubjectI
     </option>
   ));
 
-  const subjectOptions = sch_subjects?.map(subject => (
+  const subjectOptions = sch_subjects?.map((subject) => (
     <option value={subject.id} key={subject.id}>
       {subject.name}
     </option>
-  ))
+  ));
 
   const onSubjectClassesChange = (e, index, field) => {
     const options = Array.from(e.target.selectedOptions);
@@ -102,19 +108,18 @@ const NewTeacherForm = ({ allClasses, filteredClasses, sch_subjects, setSubjectI
         return subject;
       })
     );
-    setSubjectId(value)
+    setSubjectId(value);
   };
-  
+
   const addSubject = () => {
     setSubjects([...subjects, { subject_id: "", classes_ids: [] }]);
   };
-  
 
   const removeSubject = (index) => {
     const newSubjects = subjects.filter((_, i) => i !== index);
     setSubjects(newSubjects);
   };
-  
+
   const teacherSubjects = subjects?.map((subject, index) => (
     <div key={index}>
       <label htmlFor="subject_name">
@@ -122,7 +127,9 @@ const NewTeacherForm = ({ allClasses, filteredClasses, sch_subjects, setSubjectI
         <select
           id="subject_name"
           value={subject.subject_id}
-          onChange={(e) => onSubjectNameChange(index, "subject_id", e.target.value)}
+          onChange={(e) =>
+            onSubjectNameChange(index, "subject_id", e.target.value)
+          }
         >
           <option value="">Select Subject</option>
           {subjectOptions}
@@ -142,18 +149,17 @@ const NewTeacherForm = ({ allClasses, filteredClasses, sch_subjects, setSubjectI
         </select>
       </label>
       {/* <div>{subject.classes.join(' ,')}</div> */}
-      <button type="button" onClick={() => removeSubject(index)}>-</button>
+      <button type="button" onClick={() => removeSubject(index)}>
+        -
+      </button>
     </div>
   ));
-  
-  console.log(subjects)
-  
+
 
   const content = (
     <>
-      {isError && <p className="error">{error?.data?.message}</p>}
-
       <form onSubmit={onSubmit}>
+        {isError && <p className="error">{error?.data?.message}</p>}
         <label htmlFor="first_name">
           First Name:
           <input
@@ -185,7 +191,9 @@ const NewTeacherForm = ({ allClasses, filteredClasses, sch_subjects, setSubjectI
         </label>
 
         {teacherSubjects}
-        <button type="button" onClick={addSubject}>Add Subject</button>
+        <button type="button" onClick={addSubject}>
+          Add Subject
+        </button>
 
         <label htmlFor="is_form_teacher">
           Is Form Teacher:
@@ -221,6 +229,6 @@ const NewTeacherForm = ({ allClasses, filteredClasses, sch_subjects, setSubjectI
   return content;
 };
 
-const memoizedTeacherForm = memo(NewTeacherForm)
+const memoizedTeacherForm = memo(NewTeacherForm);
 
 export default memoizedTeacherForm;

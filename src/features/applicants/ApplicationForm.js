@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useApplyMutation } from "./applicantsApiSlice";
 import { useNavigate } from "react-router-dom";
-import Footer from "../../components/Footer";
 
 function generateApplicationId(prefix = "APP") {
   const randomChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -37,9 +36,6 @@ function ApplicationForm({ classes }) {
       [name]: value,
     }));
   };
-  console.log('====================================');
-  console.log(formData);
-  console.log('====================================');
 
   const canSave = Object.values(formData).every(Boolean) && !isLoading
 
@@ -78,9 +74,6 @@ function ApplicationForm({ classes }) {
 
   const content = (
     <>
-    <header>
-      <h1>Application Form</h1>
-    </header>
     <main>
     <form onSubmit={onSubmit}>
         {isError && <p>{error?.data?.messgae}</p>}
@@ -200,7 +193,6 @@ function ApplicationForm({ classes }) {
       <button type="submit">Submit</button>
     </form>
     </main>
-    <Footer />
     </>
   )
   return content

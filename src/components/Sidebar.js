@@ -4,7 +4,7 @@ const Sidebar = ({ urlSegments, setIsSidebarOpen, isSidebarOpen }) => {
   const onClick = () => setIsSidebarOpen((val) => !val);
   const links = urlSegments.map((segment, index) => (
     <NavLink
-    key={index}
+      key={index}
       to={segment}
       className={({ isActive }) =>
         isActive
@@ -12,12 +12,17 @@ const Sidebar = ({ urlSegments, setIsSidebarOpen, isSidebarOpen }) => {
           : "bg-transparent"
       }
     >
-      {segment.charAt(0).toUpperCase() + segment.slice(1)}
+      {segment
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")}
     </NavLink>
   ));
 
   const content = (
-    <aside className={`${isSidebarOpen ? "row-span-2" : ""} bg-blue-900 text-white`}>
+    <aside
+      className={`${isSidebarOpen ? "row-span-2" : ""} bg-blue-900 text-white`}
+    >
       <div className="flex justify-between px-4 py-3 text-black">
         <span className="text-lg font-bold">School</span>
         <i className="fa-solid fa-chevron-left" onClick={onClick}></i>

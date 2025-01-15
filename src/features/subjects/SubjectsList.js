@@ -1,6 +1,7 @@
 import { useGetSubjectsQuery } from "./subjectsApiSlice";
 import useAuth from "../../hooks/useAuth";
-import OutlineLists from "./OutlineLists";
+import OutlineLists from "../outlines/OutlineLists";
+import { Link } from "react-router-dom";
 
 const SubjectsList = () => {
   const { status, user_id: teacher_id, class_id } = useAuth();
@@ -11,7 +12,7 @@ const SubjectsList = () => {
     isSuccess,
     isError,
     error,
-  } = useGetSubjectsQuery(subjectFilter, {
+  } = useGetSubjectsQuery({subjectFilter, status}, {
     selectFromResult: (result) => {
       const subjects = Object.values(result?.data?.entities || {});
       return {
@@ -27,17 +28,23 @@ const SubjectsList = () => {
   if (isSuccess) {
     let accordionItems;
     if (status === "Student") {
-      accordionItems = subjects?.map((subject) => (
-        <div>
-          <div>{subject.name}</div>
+      accordionItems = subjects?.map((subject, index) => (
+        <div key={index}>
+          <div>
+            <div>{subject.name}</div>
+            <Link to={`${subject.id}`}>Goto</Link>
+          </div>
           <OutlineLists subjectId={subject.id} classId={class_id} />
         </div>
       ));
     } else if (status === "Teacher") {
-      accordionItems = subjects.map((subject) => (
-        <div>
-          <div>{subject.name}</div>
-          <OutlineLists subjectId={subject.id} classId={subject._class.id} />
+      accordionItems = subjects.map((subject, index) => (
+        <div key={index}>
+          <div>
+            <div>{subject.subject_name}</div>
+            <Link to={`${subject.id}`}>Goto{subject.id}</Link>
+          </div>
+          <OutlineLists subjectId={subject.id.split("_")[1]} classId={subject.class_id} />
         </div>
       ));
     }
@@ -45,7 +52,9 @@ const SubjectsList = () => {
     content = (
       <>
         <article>
-          <header>Subjects</header>
+          <header>
+            <h1>Subjects</h1>
+          </header>
           <div>{accordionItems}</div>
         </article>
       </>

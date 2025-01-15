@@ -161,17 +161,16 @@ const EditTeacherForm = ({ teacher, allClasses, filteredClasses, sch_subjects, s
   ));
 
   const content = (
-    <>
-      {(isError || isDelError) && <p>{errContent}</p>}
-
-      <form onSubmit={(e) => e.preventDefault()}>
-      <div>
+    <section>
+      <header>
             <h2>Edit Teacher #{teacher.first_name} {teacher.last_name}</h2>
             <div>
                 <button onClick={onSaveTeacherClicked}>Save</button>
                 <button onClick={onDeleteTeacherClicked}>Delete</button>
             </div>
-        </div>
+        </header>
+      <form onSubmit={(e) => e.preventDefault()}>
+      {(isError || isDelError) && <p>{errContent}</p>}
 
         <label htmlFor="first_name">
           First Name:
@@ -230,7 +229,7 @@ const EditTeacherForm = ({ teacher, allClasses, filteredClasses, sch_subjects, s
       </form>
 
       {displayDeletePrompt && <DeletePromptModal setCanDelete={setCanDelete} setDisplayDeletePrompt={setDisplayDeletePrompt} />}
-    </>
+    </section>
   );
 
   return content;

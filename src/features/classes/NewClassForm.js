@@ -31,9 +31,9 @@ const NewClassForm = () => {
 
   const content = (
     <>
-      {isError && <p>{error?.data?.message}</p>}
 
       <form onSubmit={onSubmit}>
+      {isError && <p>{error?.data?.message}</p>}
         <label htmlFor="name">
           Name:
           <input

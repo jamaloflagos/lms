@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useUpdateClassMutation, useDeleteClassMutation } from "./classesApiSlice";
+import {
+  useUpdateClassMutation,
+  useDeleteClassMutation,
+} from "./classesApiSlice";
 import { useEffect, useState } from "react";
 import DeletePromptModal from "../../components/DeletePromptModal";
 
@@ -7,8 +10,10 @@ const EditClassForm = ({ classData }) => {
   const navigate = useNavigate();
   const [updateClass, { isLoading, isSuccess, isError, error }] =
     useUpdateClassMutation();
-  const [deleteClass, { isSuccess: isDelSuccess, isError: isDelError, error: delError }] =
-    useDeleteClassMutation();
+  const [
+    deleteClass,
+    { isSuccess: isDelSuccess, isError: isDelError, error: delError },
+  ] = useDeleteClassMutation();
 
   const [canDelete, setCanDelete] = useState(false);
   const [displayDeletePrompt, setDisplayDeletePrompt] = useState(false);
@@ -22,7 +27,12 @@ const EditClassForm = ({ classData }) => {
   const onSaveClassClicked = async (e) => {
     e.preventDefault();
     if (canSave) {
-      await updateClass({ id: classData.id, name, nick_name: nickName, category });
+      await updateClass({
+        id: classData.id,
+        name,
+        nick_name: nickName,
+        category,
+      });
     }
   };
 
@@ -44,18 +54,17 @@ const EditClassForm = ({ classData }) => {
   }, [isSuccess, isDelSuccess, navigate]);
 
   const content = (
-    <>
-      {(isError || isDelError) && <p>{errContent}</p>}
-
-      <form onSubmit={(e) => e.preventDefault()}>
+    <section>
+      <header>
+        <h2>Edit Class #{classData.name}</h2>
         <div>
-          <h2>Edit Class #{classData.name}</h2>
-          <div>
-            <button onClick={onSaveClassClicked}>Save</button>
-            <button onClick={onDeleteClassClicked}>Delete</button>
-          </div>
+          <button onClick={onSaveClassClicked}>Save</button>
+          <button onClick={onDeleteClassClicked}>Delete</button>
         </div>
-        
+      </header>
+      <form onSubmit={(e) => e.preventDefault()}>
+        {(isError || isDelError) && <p>{errContent}</p>}
+
         <label htmlFor="name">
           Name:
           <input
@@ -92,7 +101,7 @@ const EditClassForm = ({ classData }) => {
           />
         )}
       </form>
-    </>
+    </section>
   );
 
   return content;

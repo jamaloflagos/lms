@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Questions from "../../components/Questions";
 import {
   useGetEntranceExamQuestionsQuery,
   useSubmitEntranceExamAnswersMutation,
 } from "./applicantsApiSlice";
 
-const EntranceExam = () => {
+const EntranceExam = ({ id: applicantId}) => {
   const [timer, setTimer] = useState(3600);
   const [displayPrompt, setDisplayPrompt] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const { id: applicantId } = useParams();
 
   const [
     submitAnswers,
@@ -83,9 +81,7 @@ const EntranceExam = () => {
       score,
       percentage,
     };
-    console.log('====================================');
-    console.log(scoreData);
-    console.log('====================================');
+
     const canSave = Object.values(scoreData).every(Boolean) && !isSubmitLoading;
 
     if (canSave && canSubmit) {
@@ -131,7 +127,10 @@ const EntranceExam = () => {
   if (isSuccess) {
     content = (
       <article>
-        <div style={{ color: getColor() }}>{formatTime(timer)}</div>
+        <header>
+          <h1>Entrance Exam</h1>
+          <div style={{ color: getColor() }}>Time Remaining: {formatTime(timer)}</div>
+        </header>
         <Questions
           setSelectedAnswers={setSelectedAnswers}
           selectedAnswers={selectedAnswers}

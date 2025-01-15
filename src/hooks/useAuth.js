@@ -40,7 +40,7 @@ const useAuth = () => {
 
     if (token) {
         const decoded = jwtDecode(token)
-        const { username, role, user_id, class_id } = decoded
+        const { username, role, user_id, class_id, is_form_teacher } = decoded
 
         isTeacher = role === "Teacher"
         isAdmin = role === "Admin"

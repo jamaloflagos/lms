@@ -1,9 +1,7 @@
-import { useParams } from "react-router-dom"
 import { useGetClassesQuery } from "./classesApiSlice"
 import EditClassForm from "./EditClassForm"
 
-const EditClass = () => {
-    const { id } = useParams() 
+export const EditClass = ({ id }) => {
     const { classData } = useGetClassesQuery('classesList', {
         selectFromResult: ({ data }) => ({
             classData: data?.entities[id]
@@ -12,4 +10,3 @@ const EditClass = () => {
     
   return <EditClassForm classData={classData} />
 }
-export default EditClass
