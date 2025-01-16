@@ -1,4 +1,4 @@
-import AddClass from "../../features/classes/addClass"
+import AddClass from "../../features/classes/AddClass"
 
 const NewClass = () => {
   return (

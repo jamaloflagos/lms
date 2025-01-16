@@ -1,8 +1,9 @@
 import useAuth from "../../hooks/useAuth";
 import ExamScore from "../../features/applicants/ExamScore";
+import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
-  const { user_id: applicantId, username } = useAuth();
+  const { user_id: applicantId, username, has_made_payment } = useAuth();
 
 
   let content;
@@ -12,7 +13,7 @@ export const Dashboard = () => {
         <header>
           <h1>Welcome, {username}</h1>
         </header>
-        <ExamScore applicantId={applicantId} />
+        {has_made_payment ? <ExamScore applicantId={applicantId} /> : <Link to={'payments'}>Make Payment</Link>}
       </article>
     );
 

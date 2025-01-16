@@ -12,6 +12,9 @@ const Login = () => {
   const dispatch = useDispatch();
   const [errMsg, setErrMsg] = useState("");
   const [persist, setPersist] = usePersist();
+  console.log('====================================');
+  console.log(persist);
+  console.log('====================================');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, { isLoading }] = useLoginMutation();

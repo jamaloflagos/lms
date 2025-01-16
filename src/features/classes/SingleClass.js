@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom"
 import { useGetClassesQuery } from "./classesApiSlice"
 import StudentsList from "../students/StudentsList"
 

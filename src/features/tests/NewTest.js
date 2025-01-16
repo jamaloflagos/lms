@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAddNewTestMutation } from "./testApiSlice";
+import { useAddNewTestMutation } from "./testsApiSlice";
 import QuestionForm from "../../components/QuestionForm";
 import { useNavigate } from "react-router-dom";
 

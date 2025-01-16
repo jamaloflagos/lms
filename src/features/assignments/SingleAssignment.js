@@ -5,7 +5,7 @@ import { useAddNewScoreMutation } from "../scores/scoresApiSlice";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-const SingleAssignment = ({ id, class_id, subject_id }) => {
+const SingleAssignment = ({ assignment_id, class_id, subject_id }) => {
     const [submitScore, {isLoading, isSuccess}] = useAddNewScoreMutation()
     const { user_id } = useAuth()
     const navigate = useNavigate()
@@ -15,8 +15,8 @@ const SingleAssignment = ({ id, class_id, subject_id }) => {
       const [errorMessage, setErrorMessage] = useState("");
     const { questions, time_allowed } = useGetAssignmentsQuery({ class_id, subject_id }, {
         selectFromResult: ({ data }) => ({
-            questions: data?.entities[id]?.questions,
-            time_allowed: data?.entities[id]?.time_allowed
+            questions: data?.entities[assignment_id]?.questions,
+            time_allowed: data?.entities[assignment_id]?.time_allowed
         })
     })
     const [timer, setTimer] = useState(time_allowed);
@@ -108,7 +108,8 @@ const SingleAssignment = ({ id, class_id, subject_id }) => {
 
         useEffect(() => {
             if (isSuccess) {
-                navigate('')
+              alert("You have successfully answered your assignment")
+                navigate("/student/dashboard")
             }
         }, [isSuccess, navigate])
 

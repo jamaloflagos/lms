@@ -6,7 +6,7 @@ const Assignment = () => {
   const { assignmentId } = useParams()
   const { class_id } = useAuth()
 
-  return <SingleAssignment id={assignmentId} class_id={class_id} />
+  return <SingleAssignment assignment_id={assignmentId} class_id={class_id} />
 
 }
 

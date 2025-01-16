@@ -2,19 +2,19 @@ import { Route, Routes } from "react-router-dom";
 import PersistLogin from "./features/auth/PersistLogin";
 import RequireAuth from "./features/auth/RequireAuth";
 import { ROLES } from "./config/roles";
-import {Dashboard as ApplicantDashboard} from "./pages/applicant/Dashboard";
-import {Dashboard as StudentDashboard} from "./pages/student/Dashboard";
-import {Dashboard as TeacherDashboard} from "./pages/teacher/Dashboard";
-import {Dashboard as AdminDashboard} from "./pagess/admin/Dashboard";
-import { Subject as TeacherSubject} from "./pages/teacher/Subject" ;
-import { Subject as StudentSubject} from "./pages/student/Subject" ;
-import { Subjects as TeacherSubjects} from "./pages/teacher/Subjects" ;
-import { Subjects as StudentSubjects} from "./pages/student/Subjects" ;
-import { Outline as StudentOutline} from "./pages/student/Outline";
-import { Outline as TeacherOutline} from "./pages/teacher/Outline";
+import { Dashboard as ApplicantDashboard } from "./pages/applicant/Dashboard";
+import { Dashboard as StudentDashboard } from "./pages/student/Dashboard";
+import { Dashboard as TeacherDashboard } from "./pages/teacher/Dashboard";
+import { Dashboard as AdminDashboard } from "./pages/admin/Dashboard";
+import { Subject as TeacherSubject } from "./pages/teacher/Subject";
+import { Subject as StudentSubject } from "./pages/student/Subject";
+import { Subjects as TeacherSubjects } from "./pages/teacher/Subjects";
+import { Subjects as StudentSubjects } from "./pages/student/Subjects";
+import { Outline as StudentOutline } from "./pages/student/Outline";
+import { Outline as TeacherOutline } from "./pages/teacher/Outline";
 import { Note as TeacherNote } from "./pages/teacher/Note";
 import { Note as StudentNote } from "./pages/student/Note";
-import { Exam as ApplicantExam} from "./pages/applicant/Exam";
+import { Exam as ApplicantExam } from "./pages/applicant/Exam";
 import { Reports as StudentReports } from "./pages/student/Reports";
 import { Reports as TeacherReports } from "./pages/teacher/Reports";
 import EditTeacher from "./pages/admin/EditTeacher";
@@ -33,8 +33,8 @@ import Login from "./pages/Login";
 import Teacher from "./pages/admin/Teacher";
 import Apply from "./pages/Apply";
 import UserLayout from "./layouts/UserLayout";
-import NotFound from "./pagess/NotFound";
-import OutlineLists from "./features/subjects/OutlineLists";
+import NotFound from "./pages/NotFound";
+import OutlineLists from "./features/outlines/OutlineLists";
 import NewOutline from "./pages/teacher/NewOutline";
 import EditOutline from "./pages/teacher/EditOutline";
 import NewNote from "./pages/teacher/NewNote";
@@ -50,9 +50,10 @@ import Test from "./pages/student/Test";
 import Exams from "./pages/student/Exams";
 import Exam from "./pages/student/Exam";
 import useAuth from "./hooks/useAuth";
+import NewTerm from "./pages/admin/NewTerm";
 
 function App() {
-  const { is_form_teacher } = useAuth()
+  const { is_form_teacher } = useAuth();
   const studentUrlSegments = [
     "dashboard",
     "subjects",
@@ -71,9 +72,9 @@ function App() {
     "tests",
     "exams",
   ];
-  
+
   if (is_form_teacher) {
-    teacherUrlSegments.push("reports")
+    teacherUrlSegments.push("reports");
   }
 
   return (
@@ -193,6 +194,7 @@ function App() {
               <Route path="classes/new" element={<NewClass />} />
               <Route path="classes/:id" element={<Class />} />
               <Route path="classes/:id/edit" element={<EditClass />} />
+              <Route path="terms/new" element={<NewTerm />} />
             </Route>
           </Route>
 

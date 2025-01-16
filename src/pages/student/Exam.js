@@ -6,6 +6,6 @@ const Exam = () => {
   const { examId } = useParams()
   const { class_id } = useAuth()
 
-  return <SingleExam id={examId} class_id={class_id} />
+  return <SingleExam exam_id={examId} class_id={class_id} />
 }
 export default Exam

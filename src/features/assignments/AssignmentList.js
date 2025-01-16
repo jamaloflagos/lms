@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import useAuth from "../../hooks/useAuth"
 import { useGetAssignmentsQuery } from "./assignmentsApiSlice"
+import { Link } from "react-router-dom"
 
 const AssignmentList = ({ class_id, subject_id }) => {
     const currentDate = ''
@@ -31,8 +32,10 @@ const AssignmentList = ({ class_id, subject_id }) => {
     if (isSuccess) {
         const listItems = filteredAssignments.map(assignment => (
             <li>
+                <Link to={`${assignment.id}`}>
                 <span>{assignment.subject}</span>
                 <span>{assignment.due_date}</span>
+                </Link>
             </li>
         ))
 

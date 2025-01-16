@@ -10,3 +10,5 @@
 
                     Email: opeyemiaishat@gmail.com
             Password: 8EDFoNckd2T4Yfc
+Paystack secret key: sk_test_5602840e2f806ff816dfcd41009d3babb454504b
+Paystack publick key: pk_test_ea0fa27f4806bb79ecdbf9f92f82bfa8d47f9bf0

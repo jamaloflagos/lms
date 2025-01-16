@@ -6,6 +6,6 @@ const Test = () => {
   const { testId } = useParams()
   const { class_id } = useAuth()
 
-  return <SingleTest id={testId} class_id={class_id} />
+  return <SingleTest test_id={testId} class_id={class_id} />
 }
 export default Test
