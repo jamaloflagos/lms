@@ -13,6 +13,7 @@ export const Reports = () => {
                 <section>
                     <ScoreSheet student_id={studentId}/>
                 </section>
+                <button>Download Report Card</button>
             </article>
         </>
     )

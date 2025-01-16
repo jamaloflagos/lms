@@ -53,6 +53,13 @@ const scoreApiSlice = apiSlice.injectEndpoints({
         } else return { type: "Report Card", id: "LIST" };
       },
     }),
+    generateReportCards: builder.mutation({
+      query: (reportCardData) => ({
+        url: "report-cards",
+        method: "POST",
+        body: { ...reportCardData }
+      })
+    }),
     getStudentReportCard: builder.query({
       query: (student_id) => `report-cards/${student_id}`,
     }),
@@ -76,4 +83,5 @@ export const {
   useGetClassReportCardsQuery,
   useLazyGetStudentReportCardQuery,
   useUpdateStudentReportCardMutation,
+  useGenerateReportCardsMutation
 } = scoreApiSlice;
