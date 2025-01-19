@@ -23,10 +23,6 @@ import Classes from "./pages/admin/Classes";
 import NewClass from "./pages/admin/NewClass";
 import Class from "./pages/admin/Class";
 import EditClass from "./pages/admin/EditClass";
-import GroupsList from "./features/groups/GroupsList";
-import Group from "./features/groups/Group";
-import NewGroup from "./features/groups/NewGroup";
-import EditGroup from "./features/groups/EditGroup";
 import AppLayout from "./layouts/AppLayout";
 import Public from "./pages/Public";
 import Login from "./pages/Login";
@@ -51,6 +47,10 @@ import Exams from "./pages/student/Exams";
 import Exam from "./pages/student/Exam";
 import useAuth from "./hooks/useAuth";
 import NewTerm from "./pages/admin/NewTerm";
+import Groups from "./pages/student/Groups";
+import NewGroup from "./pages/student/NewGroup";
+import Group from "./pages/student/Group";
+import EditGroup from "./pages/student/EditGroup";
 
 function App() {
   const { is_form_teacher } = useAuth();
@@ -62,6 +62,7 @@ function App() {
     "exams",
     "reports",
     "word-of-the-day",
+    "study-groups"
   ];
   const applicantUrlSegments = ["dashboard"];
   const adminUrlSegments = ["dashboard", "classes", "teachers"];
@@ -118,10 +119,10 @@ function App() {
               <Route path="exams" element={<Exams />} />
               <Route path="exams/:examId" element={<Exam />} />
               <Route path="reports" element={<StudentReports />} />
-              <Route path="groups" element={<GroupsList />} />
-              <Route path="groups/new" element={<NewGroup />} />
-              <Route path="groups/:id" element={<Group />} />
-              <Route path="groups/:id/edit" element={<EditGroup />} />
+              <Route path="study-groups" element={<Groups />} />
+              <Route path="study-groups/new" element={<NewGroup />} />
+              <Route path="study-groups/:id" element={<Group />} />
+              <Route path="study-groups/:id/edit" element={<EditGroup />} />
             </Route>
           </Route>
 

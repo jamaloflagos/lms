@@ -8,9 +8,9 @@ const groupInitialState = groupAdapter.getInitialState();
 const groupApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getGroups: builder.query({
-      query: ({ student_id, is_member }) => ({
+      query: (student_id) => ({
         url: "/groups",
-        params: {student_id, is_member}
+        params: {student_id}
       }),
       transformResponse: (responseData) => {
         return groupAdapter.setAll(groupInitialState, responseData);
@@ -53,19 +53,24 @@ const groupApiSlice = apiSlice.injectEndpoints({
       },
     }),
     addNewGroup: builder.mutation({
-      query: (initialGroup) => ({
-        url: "/groups",
-        method: "POST",
-        body: {
-          ...initialGroup,
-        },
-      }),
+      query: (initialGroup) => {
+        console.log('====================================');
+        console.log(initialGroup);
+        console.log('====================================');
+        return {
+          url: "/groups",
+          method: "POST",
+          body: {
+            ...initialGroup,
+          },
+        }
+      },
       invalidatesTags: [{ type: "Group", id: "LIST" }],
     }),
     updateGroup: builder.mutation({
       query: ({ id, ...rest }) => ({
         url: `/groups/${id}`,
-        method: "PATCH",
+        method: "UPDATE",
         body: {
           ...rest,
         },

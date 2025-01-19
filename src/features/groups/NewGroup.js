@@ -1,6 +1,5 @@
 import NewGroupForm from "./NewGroupForm"
 
-const NewGroup = () => {
+export const NewGroup = () => {
   return <NewGroupForm />
 }
-export default NewGroup
