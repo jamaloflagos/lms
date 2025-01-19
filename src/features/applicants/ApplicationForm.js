@@ -18,16 +18,19 @@ function ApplicationForm({ classes }) {
     application_id: generateApplicationId(),
     first_name: "",
     last_name: "",
-    contact_mail: "",
+    email: "",
     address: "",
-    contact_phone: "",
+    phone_number: "",
+    d_o_b: "",
     parent_first_name: "",
     parent_last_name: "",
-    parent_contact_mail: "",
+    parent_email: "",
     parent_address: "",
-    parent_contact_phone: "",
+    parent_phone_number: "",
     class_applied_for: "",
   });
+
+  const [errors, setErrors] = useState({});
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -35,34 +38,76 @@ function ApplicationForm({ classes }) {
       ...prev,
       [name]: value,
     }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
-  const canSave = Object.values(formData).every(Boolean) && !isLoading
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validate required fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (!value.trim()) {
+        newErrors[key] = "This field is required.";
+      }
+    });
+
+    // Validate email fields
+    if (
+      formData.email &&
+      !/^[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}$/.test(formData.email)
+    ) {
+      newErrors.email = "Invalid email format.";
+    }
+    if (
+      formData.parent_email &&
+      !/^[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}$/.test(formData.parent_email)
+    ) {
+      newErrors.parent_email = "Invalid email format.";
+    }
+
+    // Validate phone numbers
+    if (formData.phone_number && !/^\d{10,15}$/.test(formData.phone_number)) {
+      newErrors.phone_number = "Phone number must be 10-15 digits.";
+    }
+    if (
+      formData.parent_phone_number &&
+      !/^\d{10,15}$/.test(formData.parent_phone_number)
+    ) {
+      newErrors.parent_phone_number = "Phone number must be 10-15 digits.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (canSave) {
-        await apply(formData);
+    if (validateForm() && !isLoading) {
+      await apply(formData);
     }
   };
 
   useEffect(() => {
     if (isSuccess) {
       setFormData({
-        application_id: "",
+        application_id: generateApplicationId(),
         first_name: "",
         last_name: "",
-        contact_mail: "",
+        email: "",
         address: "",
-        contact_phone: "",
+        phone_number: "",
+        d_o_b: "",
         parent_first_name: "",
         parent_last_name: "",
-        parent_contact_mail: "",
+        parent_email: "",
         parent_address: "",
-        parent_contact_phone: "",
+        parent_phone_number: "",
         class_applied_for: "",
       });
-      navigate('/login')
+      navigate("/login");
     }
   }, [isSuccess, navigate]);
 
@@ -72,130 +117,104 @@ function ApplicationForm({ classes }) {
     </option>
   ));
 
-  const content = (
-    <>
-    <main>
-    <form onSubmit={onSubmit}>
-        {isError && <p>{error?.data?.messgae}</p>}
-      <label>
-        Application ID:
-        <input
-          type="text"
-          name="application_id"
-          value={formData.application_id}
-          readOnly
-        />
-      </label>
-      <label>
-        First Name:
-        <input
-          type="text"
-          name="first_name"
-          value={formData.first_name}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label>
-        Last Name:
-        <input
-          type="text"
-          name="last_name"
-          value={formData.last_name}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label>
-        Contact Mail:
-        <input
-          type="email"
-          name="contact_mail"
-          value={formData.contact_mail}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label>
-        Address:
-        <textarea
-          name="address"
-          value={formData.address}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label>
-        Contact Phone:
-        <input
-          type="text"
-          name="contact_phone"
-          value={formData.contact_phone}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label htmlFor="_class">
-        Class Applying For:
-        <select id="_class" name="class_applied_for" value={formData.class_applied_for} onChange={onChange}>
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <form
+        onSubmit={onSubmit}
+        className="bg-white p-8 rounded shadow-md w-full max-w-md"
+      >
+        <header className="mb-4 font-bold text-3xl text-blue-600">
+          <h1>Application Form</h1>
+        </header>
+        {isError && (
+          <p className="text-red-500 text-sm mb-4">{error?.data?.message}</p>
+        )}
+
+        <div className="mb-4">
+          <label htmlFor="application_id" className="block text-gray-700">
+            Application ID:
+          </label>
+          <input
+            type="text"
+            id="application_id"
+            name="application_id"
+            value={formData.application_id}
+            readOnly
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          />
+        </div>
+
+        {[
+          { id: "first_name", label: "First Name" },
+          { id: "last_name", label: "Last Name" },
+          { id: "email", label: "Email", type: "email" },
+          { id: "address", label: "Address", type: "textarea" },
+          { id: "phone_number", label: "Contact Phone" },
+          { id: "d_o_b", label: "Date of Birth", type: "date" },
+          { id: "parent_first_name", label: "Parent First Name" },
+          { id: "parent_last_name", label: "Parent Last Name" },
+          { id: "parent_email", label: "Parent Email", type: "email" },
+          { id: "parent_address", label: "Parent Address", type: "textarea" },
+          { id: "parent_phone_number", label: "Parent Contact Phone" },
+        ].map(({ id, label, type = "text" }) => (
+          <div className="mb-4" key={id}>
+            <label htmlFor={id} className="block text-gray-700">
+              {label}:
+            </label>
+            {type === "textarea" ? (
+              <textarea
+                id={id}
+                name={id}
+                value={formData[id]}
+                onChange={onChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              />
+            ) : (
+              <input
+                type={type}
+                id={id}
+                name={id}
+                value={formData[id]}
+                onChange={onChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              />
+            )}
+            {errors[id] && (
+              <p className="text-red-500 text-sm mt-1">{errors[id]}</p>
+            )}
+          </div>
+        ))}
+
+        <div className="mb-4">
+          <label htmlFor="_class" className="block text-gray-700">
+            Class Applying For:
+          </label>
+          <select
+            id="_class"
+            name="class_applied_for"
+            value={formData.class_applied_for}
+            onChange={onChange}
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          >
+            <option value="">Choose Class</option>
             {classOptions}
-        </select>
-      </label>
-      <label>
-        Parent First Name:
-        <input
-          type="text"
-          name="parent_first_name"
-          value={formData.parent_first_name}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label>
-        Parent Last Name:
-        <input
-          type="text"
-          name="parent_last_name"
-          value={formData.parent_last_name}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label>
-        Parent Contact Mail:
-        <input
-          type="email"
-          name="parent_contact_mail"
-          value={formData.parent_contact_mail}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label>
-        Parent Address:
-        <textarea
-          name="parent_address"
-          value={formData.parent_address}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <label>
-        Parent Contact Phone:
-        <input
-          type="text"
-          name="parent_contact_phone"
-          value={formData.parent_contact_phone}
-          onChange={onChange}
-          required
-        />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
-    </main>
-    </>
-  )
-  return content
+          </select>
+          {errors.class_applied_for && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.class_applied_for}
+            </p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  );
 }
 
 export default ApplicationForm;

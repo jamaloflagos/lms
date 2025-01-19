@@ -11,7 +11,6 @@ const SingleTest = ({ test_id, class_id, subject_id }) => {
     const navigate = useNavigate()
     const [selectedAnswers, setSelectedAnswers] = useState([])
       const [displayPrompt, setDisplayPrompt] = useState(false);
-      const [canSubmit, setCanSubmit] = useState(false);
       const [errorMessage, setErrorMessage] = useState("");
     const { questions, time_allowed } = useGetTestsQuery({ class_id, subject_id }, {
         selectFromResult: ({ data }) => ({
@@ -19,7 +18,7 @@ const SingleTest = ({ test_id, class_id, subject_id }) => {
             time_allowed: data?.entities[test_id]?.time_allowed
         })
     })
-    const [timer, setTimer] = useState(time_allowed);
+    const [timer, setTimer] = useState(time_allowed * 60);
 
     const calculateScore = () => {
         return selectedAnswers.reduce((score, answer, index) => {
@@ -43,41 +42,39 @@ const SingleTest = ({ test_id, class_id, subject_id }) => {
         return true;
       };
 
-      const handleSubmit = async (e) => {
+      const handleSubmit = (e) => {
         e.preventDefault();
     
         if (!validateAnswers()) {
           return;
         }
     
-    
-        setDisplayPrompt(true);
-        const score = calculateScore();
+        setDisplayPrompt(true); 
+      };
 
+      const onYesClicked = async () => {
+        setDisplayPrompt(false);
+    
+        const score = calculateScore();
+    
         const scoreData = {
-            value: score,
-            score_type: 'Test',
-            subject: subject_id,
-            student: user_id
-        }
+          value: score,
+          score_type: "Assignment",
+          subject: subject_id,
+          student: user_id,
+        };
     
         const canSave = Object.values(scoreData).every(Boolean) && !isLoading;
     
-        if (canSave && canSubmit) {
-
+        if (canSave) {
           await submitScore(scoreData);
         }
-      };
-
-      const onYesClicked = () => {
-        setDisplayPrompt(false);
-        setCanSubmit(true);
       };
     
       const onNoClicked = () => {
         setDisplayPrompt(false);
-        setCanSubmit(false);
       };
+
 
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);

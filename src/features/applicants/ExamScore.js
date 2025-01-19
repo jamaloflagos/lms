@@ -26,7 +26,7 @@ const ExamScore = ({ applicantId }) => {
       content = (
           <section>
             <p>You've taken your entrance exam.</p>
-            <p>Your obtained score is {score?.value}</p>
+            <p>Check your email for follow up!</p>
           </section>
       );
     }

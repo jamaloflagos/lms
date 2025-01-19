@@ -12,7 +12,7 @@ const subjectsApiSlice = apiSlice.injectEndpoints({
         params: { outline_id: outlineId },
       }),
       transformResponse: (responseData) => {
-        noteAdapter.setAll(initialState, responseData);
+        return noteAdapter.setAll(initialState, responseData);
       },
       providesTags: (result, error, arg) => {
         if (result?.ids) {
@@ -39,6 +39,7 @@ const subjectsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Outline", id: arg.id },
+        { type: "Note", id: "LIST" }
       ],
     }),
     deleteNote: builder.mutation({

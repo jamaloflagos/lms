@@ -4,9 +4,6 @@ const NewTerm = () => {
   return (
     <>
         <article>
-            <header>
-                <h1>New Term</h1>
-            </header>
             <section>
                 <AddNewterm />
             </section>

@@ -26,14 +26,21 @@ const subjectsApiSlice = apiSlice.injectEndpoints({
         };
       },
       transformResponse: (responseData, meta, arg) => {
-        const { status } = arg;
-        const modifiedData =
-          status === "Teacher"
-            ? responseData.map((item) => ({
-                ...item,
-                id: `${item.class_id}_${item.subject_id}`,
-              }))
-            : responseData;
+        console.log('====================================');
+        console.log(responseData);
+        console.log('====================================');
+        let modifiedData;
+        if (arg) {
+          const { status } = arg;
+          modifiedData =
+            status === "Teacher"
+              ? responseData.map((item) => ({
+                  ...item,
+                  id: `${item.class_id}_${item.subject_id}`,
+                }))
+              : responseData;
+        } else modifiedData = responseData
+        
         return subjectAdapter.setAll(initialState, modifiedData);
       },
       providesTags: (result, error, arg) => {

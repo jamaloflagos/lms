@@ -13,11 +13,17 @@ const applicantsApiSlice = apiSlice.injectEndpoints({
             query: () => "entrance-exam-questions"
         }),
         submitEntranceExamAnswers: builder.mutation({
-            query: (scoreData) => ({
-                url: "entrance-exam-score",
-                method: "POST",
-                body: { ...scoreData }
-            })
+            query: (scoreData) => {
+                console.log('====================================');
+                console.log(scoreData);
+                console.log('====================================');
+                return {
+                    url: "entrance-exam-score",
+                    method: "POST",
+                    body: { ...scoreData }
+                }
+                
+            }
         }),
         getEntranceExamScore: builder.query({
             query: (applicantId) => `entrance-exam-score/${applicantId}`

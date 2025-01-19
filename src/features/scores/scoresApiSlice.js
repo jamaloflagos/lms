@@ -11,14 +11,14 @@ const scoreApiSlice = apiSlice.injectEndpoints({
         url: "scores",
         params: { student_id, subject_id },
       }),
-      providesTags: (result, error, arg) => {
-        if (result?.ids) {
-          return [
-            { type: "Score", id: "LIST" },
-            ...result.ids.map((id) => ({ type: "Score", id })),
-          ];
-        } else return { type: "Score", id: "LIST" };
-      },
+      // providesTags: (result, error, arg) => {
+      //   if (result?.ids) {
+      //     return [
+      //       { type: "Score", id: "LIST" },
+      //       ...result.ids.map((id) => ({ type: "Score", id })),
+      //     ];
+      //   } else return { type: "Score", id: "LIST" };
+      // },
     }),
     addNewScore: builder.mutation({
       query: (scoreData) => ({
@@ -40,18 +40,18 @@ const scoreApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getClassReportCards: builder.query({
-      query: (class_id) => ({
+      query: ({class_id}) => ({
         url: "report-cards",
         params: { class_id },
       }),
-      providesTags: (result, error, arg) => {
-        if (result?.ids) {
-          return [
-            { type: "Report Card", id: "LIST" },
-            ...result.ids.map((id) => ({ type: "Report Card", id })),
-          ];
-        } else return { type: "Report Card", id: "LIST" };
-      },
+      // providesTags: (result, error, arg) => {
+      //   if (result?.ids) {
+      //     return [
+      //       { type: "Report Card", id: "LIST" },
+      //       ...result.ids.map((id) => ({ type: "Report Card", id })),
+      //     ];
+      //   } else return { type: "Report Card", id: "LIST" };
+      // },
     }),
     generateReportCards: builder.mutation({
       query: (reportCardData) => ({

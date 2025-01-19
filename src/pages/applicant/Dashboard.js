@@ -12,6 +12,7 @@ export const Dashboard = () => {
       <article>
         <header>
           <h1>Welcome, {username}</h1>
+          <h2>Okay</h2>
         </header>
         {has_made_payment ? <ExamScore applicantId={applicantId} /> : <Link to={'payments'}>Make Payment</Link>}
       </article>

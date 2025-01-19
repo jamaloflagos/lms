@@ -68,9 +68,6 @@ function App() {
   const teacherUrlSegments = [
     "dashboard",
     "subjects",
-    "assignments",
-    "tests",
-    "exams",
   ];
 
   if (is_form_teacher) {
@@ -115,11 +112,11 @@ function App() {
                 element={<StudentNote />}
               />
               <Route path="assignments" element={<Assignments />} />
-              <Route path="assignment/:assignmentId" element={<Assignment />} />
+              <Route path="assignments/:assignmentId" element={<Assignment />} />
               <Route path="tests" element={<Tests />} />
-              <Route path="test/:testId" element={<Test />} />
+              <Route path="tests/:testId" element={<Test />} />
               <Route path="exams" element={<Exams />} />
-              <Route path="exam/:examId" element={<Exam />} />
+              <Route path="exams/:examId" element={<Exam />} />
               <Route path="reports" element={<StudentReports />} />
               <Route path="groups" element={<GroupsList />} />
               <Route path="groups/new" element={<NewGroup />} />
@@ -158,7 +155,7 @@ function App() {
                 element={<NewOutline />}
               />
               <Route
-                path="subjects/outlines/:outlineId/edit"
+                path="subjects/outlines/:outlineId/:classId/:subjectId/edit"
                 element={<EditOutline />}
               />
               <Route

@@ -6,7 +6,7 @@ import { useGetSubjectsQuery } from "../subjects/subjectsApiSlice";
 
 export const EditTeacher = ({ id }) => {
   const [subjectId, setSubjectId] = useState(1);
-  const { subjects = [] } = useGetSubjectsQuery("subjectsList", {
+  const { subjects = [] } = useGetSubjectsQuery(undefined, {
     selectFromResult: ({ data }) => {
       const subjects = Object.values(data?.entities || {}).map((subject) => ({
         id: subject.id,

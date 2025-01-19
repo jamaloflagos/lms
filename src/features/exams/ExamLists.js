@@ -1,13 +1,21 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useGetExamsQuery } from "./examsApiSlice";
 import { Link } from "react-router-dom";
 
 const ExamList = ({ class_id, subject_id }) => {
-  const currentDate = "";
   const { status } = useAuth();
-  const [filteredExams, setFilteredExams] = useState([]);
-  const filter = status === "Teacher" ? { class_id, subject_id } : { class_id };
+
+  // Use current date for filtering
+  const currentDate = useMemo(
+    () => new Date().toISOString().split("T")[0],
+    []
+  );
+
+  // Determine filter for API query
+  const filter =
+    status === "Teacher" ? { class_id, subject_id } : { class_id };
+
   const {
     exams = [],
     isLoading,
@@ -25,29 +33,63 @@ const ExamList = ({ class_id, subject_id }) => {
     }),
   });
 
-  useEffect(() => {
-    if (exams.length > 0) {
-      setFilteredExams(exams.filter((exam) => exam.due_date > currentDate));
-    }
-  }, [exams, isSuccess]);
+  // Filter exams to show only those with future due dates
+  const filteredExams = useMemo(
+    () => exams.filter((exam) => exam.due_date > currentDate),
+    [exams, currentDate]
+  );
 
   let content;
 
-  if (isLoading) content = <p>Loading...</p>;
-  if (isError) content = <p>{error?.data?.message}</p>;
-  if (isSuccess) {
-    const listItems = filteredExams.map((exam) => (
-      <li>
-        <Link to={`${exam.id}`}>
-          <span>{exam.subject}</span>
-          <span>{exam.due_date}</span>
-        </Link>
-      </li>
-    ));
+  if (isLoading) {
+    content = <p className="text-gray-600">Loading exams...</p>;
+  } else if (isError) {
+    content = (
+      <p className="text-red-600">
+        {error?.data?.message || "An error occurred while loading exams."}
+      </p>
+    );
+  } else if (isSuccess) {
+    if (filteredExams.length === 0) {
+      content = (
+        <p className="text-gray-500 italic">
+          No upcoming exams available.
+        </p>
+      );
+    } else {
+      const listItems = filteredExams.map((exam) => (
+        <li
+          key={exam.id}
+          className="p-4 bg-white rounded-lg shadow-md border border-gray-200 hover:bg-gray-50"
+        >
+          <Link
+            to={`${exam.id}`}
+            className="flex justify-between items-center text-blue-600 hover:underline"
+          >
+            <span className="font-medium text-gray-800">
+              {exam.subject}
+            </span>
+            <span className="text-sm text-gray-600">
+              Due: {exam.due_date}
+            </span>
+          </Link>
+        </li>
+      ));
 
-    content = <ul>{listItems}</ul>;
+      content = (
+        <ul className="space-y-4">
+          {listItems}
+        </ul>
+      );
+    }
   }
 
-  return content;
+  return (
+    <div className="p-4 bg-gray-50 rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">Exams</h2>
+      {content}
+    </div>
+  );
 };
+
 export default ExamList;

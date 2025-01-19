@@ -4,7 +4,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 const outlineAdapter = createEntityAdapter();
 const initialState = outlineAdapter.getInitialState();
 
-const subjectsApiSlice = apiSlice.injectEndpoints({
+const outlinesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getOutlines: builder.query({
       query: ({ class_id, subject_id }) => ({
@@ -24,14 +24,6 @@ const subjectsApiSlice = apiSlice.injectEndpoints({
         return [{ type: 'Outline', id: 'LIST' }];
       },
     }),
-    addNewOutline: builder.mutation({
-      query: (outlineData) => ({
-        url: "outlines",
-        method: "POST",
-        body: { ...outlineData },
-      }),
-      invalidatesTags: [{ type: "Outline", id: "LIST" }],
-    }),
     updateOutline: builder.mutation({
       query: ({ id, ...rest }) => ({
         url: `/outlines/${id}`,
@@ -39,8 +31,17 @@ const subjectsApiSlice = apiSlice.injectEndpoints({
         body: { ...rest },
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: "Oultine", id: arg.id },
+        { type: "Outline", id: arg.id },
+        { type: "Outline", id: "LIST" }
       ],
+    }),
+    addNewOutline: builder.mutation({
+      query: (outlineData) => ({
+        url: "outlines",
+        method: "POST",
+        body: { ...outlineData },
+      }),
+      invalidatesTags: [{ type: "Outline", id: "LIST" }],
     }),
     deleteOutline: builder.mutation({
       query: ({ id }) => ({
@@ -59,4 +60,4 @@ export const {
   useAddNewOutlineMutation,
   useUpdateOutlineMutation,
   useDeleteOutlineMutation,
-} = subjectsApiSlice;
+} = outlinesApiSlice;

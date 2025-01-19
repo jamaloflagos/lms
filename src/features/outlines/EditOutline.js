@@ -1,15 +1,13 @@
-import { useParams } from "react-router-dom";
 import { useGetOutlinesQuery } from "./outlinesApiSlice";
 import EditOutlineForm from "./EditOutlineForm";
 
-const EditOutline = () => {
-  const { id: outlineId } = useParams();
-  const { outline } = useGetOutlinesQuery("outlinesList", {
+export const EditOutline = ({ outlineId, classId, subjectId }) => {
+  const { outline } = useGetOutlinesQuery({ class_id: classId, subject_id: subjectId}, {
     selectFromResult: ({ data }) => ({
       outline: data?.entities[outlineId],
     }),
   });
 
-  return <EditOutlineForm outline={outline} />;
+  return <EditOutlineForm outline={outline} class_id={classId} subject_id={subjectId} />;
 };
-export default EditOutline;
+

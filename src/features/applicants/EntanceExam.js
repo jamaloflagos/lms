@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Questions from "../../components/Questions";
 import {
   useGetEntranceExamQuestionsQuery,
   useSubmitEntranceExamAnswersMutation,
 } from "./applicantsApiSlice";
 
-const EntranceExam = ({ id: applicantId}) => {
+const EntranceExam = ({ id: applicantId }) => {
   const [timer, setTimer] = useState(3600);
   const [displayPrompt, setDisplayPrompt] = useState(false);
-  const [canSubmit, setCanSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate()
 
   const [
     submitAnswers,
@@ -37,7 +37,6 @@ const EntranceExam = ({ id: applicantId}) => {
       return answer === questions[index].answer ? score + 1 : score;
     }, 0);
   };
-
   const validateAnswers = () => {
     const unanswered = selectedAnswers
       .map((answer, index) => (answer === null ? index + 1 : null))
@@ -54,41 +53,39 @@ const EntranceExam = ({ id: applicantId}) => {
     return true;
   };
 
-  const onYesClicked = () => {
+  const onYesClicked = async () => {
     setDisplayPrompt(false);
-    setCanSubmit(true);
+
+    const score = calculateScore();
+    const percentage = (score / questions.length) * 100;
+
+    const scoreData = {
+      applicant: applicantId,
+      value: score,
+      percentage,
+    };
+
+    const canSave = Object.values(scoreData).every(Boolean) && !isSubmitLoading;
+
+    if (canSave) {
+      await submitAnswers(scoreData);
+    }
   };
 
-  const onNoClicked = () => {
-    setDisplayPrompt(false);
-    setCanSubmit(false);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validateAnswers()) {
       return;
     }
 
-
-    setDisplayPrompt(true);
-    const score = calculateScore();
-    console.log(score)
-    const percentage = (score / questions.length) * 100;
-    const scoreData = {
-      applicant_id: applicantId,
-      score,
-      percentage,
-    };
-
-    const canSave = Object.values(scoreData).every(Boolean) && !isSubmitLoading;
-
-    if (canSave && canSubmit) {
-      console.log('yes')
-      await submitAnswers(scoreData);
-    }
+    setDisplayPrompt(true); 
   };
+
+  const onNoClicked = () => {
+    setDisplayPrompt(false);
+  };
+
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
@@ -104,7 +101,6 @@ const EntranceExam = ({ id: applicantId}) => {
       setSelectedAnswers(Array(questions.length).fill(null));
     }
   }, [questions]);
-  
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -116,34 +112,68 @@ const EntranceExam = ({ id: applicantId}) => {
     return () => clearInterval(intervalId);
   }, [timer]);
 
+  useEffect(() => {
+    if (timer === 0) {
+      setDisplayPrompt(false); 
+      onYesClicked(); 
+    }
+  }, [timer]);
+
+  useEffect(() => {
+    if (isSubmitSuccess) {
+      alert("Congratulations!!! \n You have submitted sucessfully, go to your dashboard")
+    }
+
+    navigate("/applicant/dashboard")
+  }, [isSubmitSuccess, navigate])
+
   const errContent =
     (error?.data || submitError?.data) ?? "";
+
+    
 
   let content;
   if (isLoading) content = <p>Loading....</p>;
   if (isError || isSubmitError) content = <p>{errContent}</p>;
-  if (isSubmitSuccess)
-    content = <p>You have successfully answered your entrance exam. <Link to={"/applicant/dashboard"}>Go to your Dashboard</Link></p>;
   if (isSuccess) {
     content = (
-      <article>
-        <header>
-          <h1>Entrance Exam</h1>
-          <div style={{ color: getColor() }}>Time Remaining: {formatTime(timer)}</div>
+      <article className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+        <header className="mb-4">
+          <h1 className="text-3xl font-bold text-blue-600">Entrance Exam</h1>
+          <div className={`text-xl mt-2 ${getColor()}`}>
+            Time Remaining: {formatTime(timer)}
+          </div>
         </header>
+
         <Questions
           setSelectedAnswers={setSelectedAnswers}
           selectedAnswers={selectedAnswers}
           questions={questions}
+          // You can implement pagination logic in Questions component if not already done
         />
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        <button onClick={handleSubmit}>Submit</button>
+        {errorMessage && <p className="text-red-600">{errorMessage}</p>}
+        <button
+          onClick={handleSubmit}
+          className="mt-4 py-2 px-6 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Submit
+        </button>
 
         {displayPrompt && (
-          <div>
+          <div className="mt-6 p-4 bg-gray-100 rounded-md">
             <p>Are you sure you want to submit?</p>
-            <button onClick={onNoClicked}>No</button>
-            <button onClick={onYesClicked}>Yes</button>
+            <button
+              onClick={onNoClicked}
+              className="mr-4 py-1 px-4 bg-gray-300 text-black rounded"
+            >
+              No
+            </button>
+            <button
+              onClick={onYesClicked}
+              className="py-1 px-4 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Yes
+            </button>
           </div>
         )}
       </article>

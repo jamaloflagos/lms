@@ -37,7 +37,7 @@ const teacherApiSlice = apiSlice.injectEndpoints({
     updateTeacher: builder.mutation({
       query: ({ id, ...rest}) => ({
         url: `/teachers/${id}`,
-        method: "PATCH",
+        method: "PUT",
         body: {
           ...rest,
         },
@@ -47,12 +47,15 @@ const teacherApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     deleteTeacher: builder.mutation({
-      query: ({ id }) => ({
-        url: `/teachers/${id}`,
-        method: "DELETE",
-      }),
+      query: ({ id }) => {
+        return {
+          url: `/teachers/${id}`,
+          method: "DELETE",
+        }
+      },
       invalidatesTags: (result, error, arg) => [
         { type: "Teacher", id: arg.id },
+        { type: "Teacher", id: "LIST"}
       ],
     }),
   }),

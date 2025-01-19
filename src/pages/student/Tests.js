@@ -6,9 +6,6 @@ const Tests = () => {
   return (
     <>
       <article>
-        <header>
-          <h1>Tests</h1>
-        </header>
         <section>
           <TestList class_id={class_id} />
         </section>

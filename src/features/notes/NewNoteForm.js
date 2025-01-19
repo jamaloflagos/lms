@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAddNewNoteMutation } from "./notesApiSlice";
+import SuccessPromptModal from "../../components/SuccessPromptModal";
 
-const NewNoteForm = (outlineId) => { 
+const NewNoteForm = ({ outlineId }) => {
   const [title, setTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
-  const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+  const [displaySuccessModal, setDisplaySuccessModal] = useState(false)
 
   const [addNewNote, { isLoading, isSuccess, isError, error }] =
     useAddNewNoteMutation();
 
   const canSave = [outlineId, title, noteContent].every(Boolean) && !isLoading;
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!title) newErrors.title = "Title is required.";
+    if (!noteContent) newErrors.noteContent = "Content is required.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (canSave) {
+    if (validateForm() && canSave) {
       await addNewNote({ outline: outlineId, title, content: noteContent });
     }
   };
@@ -23,41 +32,65 @@ const NewNoteForm = (outlineId) => {
     if (isSuccess) {
       setTitle("");
       setNoteContent("");
-      navigate("");
+      setDisplaySuccessModal(true)
     }
-  }, [isSuccess, navigate]);
+  }, [isSuccess]);
 
-  const content = (
-    <>
-      <article>
-        <header>
-          <h1>Add New Note</h1>
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <form
+        onSubmit={onSubmit}
+        className="bg-white p-8 rounded shadow-md w-full max-w-lg"
+      >
+        <header className="mb-4 font-bold text-3xl text-blue-600">
+          Add New Note
         </header>
-      </article>
-      <form onSubmit={onSubmit}>
-        {isError && <p>{error?.data?.message}</p>}
-        <label htmlFor="title">
-          Title:
+        {isError && (
+          <p className="text-red-500 text-sm mb-4">{error?.data?.message}</p>
+        )}
+
+        <div className="mb-4">
+          <label htmlFor="title" className="block text-gray-700">
+            Title:
+          </label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2"
           />
-        </label>
-        <label htmlFor="content">
-          Content:
+          {errors.title && (
+            <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="noteContent" className="block text-gray-700">
+            Content:
+          </label>
           <textarea
-            id="content"
+            id="noteContent"
             value={noteContent}
             onChange={(e) => setNoteContent(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2"
           ></textarea>
-        </label>
-        <button>Save</button>
-      </form>
-    </>
-  );
+          {errors.noteContent && (
+            <p className="text-red-500 text-sm mt-1">{errors.noteContent}</p>
+          )}
+        </div>
 
-  return content;
+        <button
+          type="submit"
+          className="bg-blue-500 text-white py-2 px-4 rounded"
+          // disabled={!canSave}
+        >
+          {isLoading ? "Saving..." : "Save"}
+        </button>
+      </form>
+      {displaySuccessModal && <SuccessPromptModal setDisplaySuccessModal={setDisplaySuccessModal} />}
+    </div>
+  );
 };
+
 export default NewNoteForm;

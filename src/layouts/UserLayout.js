@@ -3,31 +3,47 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import { useState } from "react";
+import GoBack from "../components/GoBack";
 
 const UserLayout = ({ urlSegments }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
-    <div className={`${isSidebarOpen ? "grid grid-cols-[1fr_3fr] grid-rows-[auto_1fr] h-screen" : "h-screen relative"}`}>
-      {isSidebarOpen ? (
+    <div className="flex flex-col h-screen overflow-hidden">
+      {/* Header with Sidebar Toggle */}
+      <Header
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
         <Sidebar
+          urlSegments={urlSegments}
           setIsSidebarOpen={setIsSidebarOpen}
           isSidebarOpen={isSidebarOpen}
-          urlSegments={urlSegments}
         />
-      ) : (
-        <button
-          onClick={() => setIsSidebarOpen((val) => !val)}
-          className="absolute top-5 left-5"
+
+        {/* Main Content */}
+        <main
+          className={`relative flex-1 bg-gray-100 overflow-y-auto transition-transform duration-300 ${
+            isSidebarOpen ? "md:pl-64" : ""
+          }`}
         >
-          Open
-        </button>
-      )}
-      <Header isSidebarOpen={isSidebarOpen} />
-      <main className={`${isSidebarOpen ? "col-start-2" : ""} h-full`}>
-        <Outlet />
-      </main>
-      <Footer isSidebarOpen={isSidebarOpen} />
+          <div className="p-4">
+            <GoBack />
+          </div>
+          {/* Main Content */}
+          <div className="p-6">
+            <Outlet />
+          </div>
+        </main>
+      </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
+
 export default UserLayout;

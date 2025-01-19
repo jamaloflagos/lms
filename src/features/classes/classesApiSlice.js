@@ -15,6 +15,9 @@ const classApiSlice = apiSlice.injectEndpoints({
         };
       },
       transformResponse: (responseData) => {
+        console.log('====================================');
+        console.log(responseData);
+        console.log('====================================');
         return classAdapter.setAll(initialState, responseData);
       },
       providesTags: (result, error, arg) => {

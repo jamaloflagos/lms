@@ -7,9 +7,6 @@ const Assignments = () => {
   return (
     <>
       <article>
-        <header>
-          <h1>Assignments</h1>
-        </header>
         <section>
           <AssignmentList class_id={class_id} />
         </section>

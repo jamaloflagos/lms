@@ -5,9 +5,6 @@ const NewTeacher = () => {
     <>
     <article>
       <section>
-        <header>
-          <h1>New Teacher</h1>
-        </header>
         <AddTeacher />
       </section>
     </article>
