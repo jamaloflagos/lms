@@ -22,9 +22,6 @@ const GroupsList = () => {
   const [filterValue, setFilterValue] = useState("");
 
   const joinGroup = async (groupId) => {
-    console.log('====================================');
-    console.log(groupId);
-    console.log('====================================');
     await updateGroup({id: groupId, student_id: studentId })
   }
 
