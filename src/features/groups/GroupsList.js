@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { useGetGroupsQuery } from "./groupsApiSlice";
+import { useGetGroupsQuery, useUpdateGroupMutation } from "./groupsApiSlice";
 
 const GroupsList = () => {
   const { user_id: studentId } = useAuth();
-  const { groups = [], isLoading, isSuccess, isError, error } = useGetGroupsQuery(studentId, {
+  const { groups = [], isLoading, isSuccess, isError, error, refetch } = useGetGroupsQuery(studentId, {
     selectFromResult: (result) => ({
       groups: Object.values(result?.data?.entities || {}).map((group) => ({
         id: group.id,
@@ -18,13 +18,23 @@ const GroupsList = () => {
     }),
   });
 
-  console.log('====================================');
-  console.log(groups);
-  console.log('====================================');
-
+  const [updateGroup, {isSuccess: updateIsSuccess, }] = useUpdateGroupMutation()
   const [filterValue, setFilterValue] = useState("");
 
-  // Filter groups based on the is_member field
+  const joinGroup = async (groupId) => {
+    console.log('====================================');
+    console.log(groupId);
+    console.log('====================================');
+    await updateGroup({id: groupId, student_id: studentId })
+  }
+
+  useEffect(() => {
+    if (updateIsSuccess){
+      refetch()
+    }
+  }, [updateIsSuccess])
+
+
   const filteredGroups = groups.filter((group) =>
     filterValue
       ? filterValue === "member"
@@ -74,16 +84,17 @@ const GroupsList = () => {
               {memberGroups.length > 0 ? (
                 <ul className="space-y-4">
                   {memberGroups.map((group) => (
-                    <li
-                      key={group.id}
-                      className="border border-gray-300 rounded-lg p-4 shadow-md"
-                    >
-                      <h4 className="text-lg font-medium">{group.name}</h4>
-                      <p className="text-gray-500 text-sm">Creator: {group.creator_name}</p>
-                      <p className="text-green-600 text-sm">
-                        You are a member of this group
-                      </p>
-                    </li>
+                    <Link to={`${group.id}`}  key={group.id}>
+                      <li
+                        className="border border-gray-300 rounded-lg p-4 shadow-md"
+                      >
+                        <h4 className="text-lg font-medium">{group.name}</h4>
+                        <p className="text-gray-500 text-sm">Creator: {group.creator_name}</p>
+                        <p className="text-green-600 text-sm">
+                          You are a member of this group
+                        </p>
+                      </li>
+                    </Link>
                   ))}
                 </ul>
               ) : (
@@ -105,7 +116,7 @@ const GroupsList = () => {
                     >
                       <h4 className="text-lg font-medium">{group.name}</h4>
                       <p className="text-gray-500 text-sm">Creator: {group.creator_name}</p>
-                      <button className="bg-blue-600 text-white px-3 py-2 rounded mt-2 hover:bg-blue-700">
+                      <button className="bg-blue-600 text-white px-3 py-2 rounded mt-2 hover:bg-blue-700" onClick={() => joinGroup(group.id)}>
                         Join Group
                       </button>
                     </li>

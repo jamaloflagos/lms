@@ -121,8 +121,8 @@ function App() {
               <Route path="reports" element={<StudentReports />} />
               <Route path="study-groups" element={<Groups />} />
               <Route path="study-groups/new" element={<NewGroup />} />
-              <Route path="study-groups/:id" element={<Group />} />
-              <Route path="study-groups/:id/edit" element={<EditGroup />} />
+              <Route path="study-groups/:groupId" element={<Group />} />
+              <Route path="study-groups/:groupId/edit" element={<EditGroup />} />
             </Route>
           </Route>
 

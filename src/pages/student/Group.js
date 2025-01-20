@@ -1,6 +1,9 @@
+import { useParams } from "react-router-dom"
+import SingleGroup from "../../features/groups/SingleGroup"
+
 const Group = () => {
-  return (
-    <div>Group</div>
-  )
+  const { groupId } = useParams()
+
+  return <SingleGroup groupId={groupId} />
 }
 export default Group

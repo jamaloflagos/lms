@@ -25,38 +25,19 @@ const groupApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getMembers: builder.query({
-      query: ({ id }) => ({
-        url: `/groups/${id}`,
+      query: (groupId) => ({
+        url: `/groups/${groupId}`,
         params: { data: 'members' }
-      }),
-      providesTags: (result, error, arg) => {
-        if (result?.ids) {
-          return [
-            { type: "Member", id: "LIST" },
-            ...result.ids.map((id) => ({ type: "Member", id })),
-          ];
-        } else return { type: "Member", id: "LIST" };
-      },
+      })
     }),
     getMessages: builder.query({
-      query: ({ id }) => ({
-        url: `/groups/${id}`,
+      query: (groupId) => ({
+        url: `/groups/${groupId}`,
         params: { data: 'messages' }
-      }),
-      providesTags: (result, error, arg) => {
-        if (result?.ids) {
-          return [
-            { type: "Message", id: "LIST" },
-            ...result.ids.map((id) => ({ type: "Message", id })),
-          ];
-        } else return { type: "Message", id: "LIST" };
-      },
+      })
     }),
     addNewGroup: builder.mutation({
       query: (initialGroup) => {
-        console.log('====================================');
-        console.log(initialGroup);
-        console.log('====================================');
         return {
           url: "/groups",
           method: "POST",
@@ -70,13 +51,14 @@ const groupApiSlice = apiSlice.injectEndpoints({
     updateGroup: builder.mutation({
       query: ({ id, ...rest }) => ({
         url: `/groups/${id}`,
-        method: "UPDATE",
+        method: "PUT",
         body: {
           ...rest,
         },
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Group", id: arg.id },
+        { type: "Group", id: "LIST" }
       ],
     }),
     deleteGroup: builder.mutation({
@@ -96,6 +78,7 @@ export const {
     useAddNewGroupMutation,
     useUpdateGroupMutation,
     useDeleteGroupMutation,
+    useGetMessagesQuery,
 } = groupApiSlice;
 
 const selectGroupsResult =
