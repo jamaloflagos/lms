@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { useGetGroupsQuery } from "./groupsApiSlice";
+import { useAddNewMessageMutation, useGetGroupsQuery } from "./groupsApiSlice";
 import MessagesList from "./MessagesList";
 import { Link } from "react-router-dom";
 
@@ -11,9 +11,17 @@ const SingleGroup = ({ groupId }) => {
       group: data?.entities[groupId],
     }),
   });
+  const [addNewMessage, {isLoading}] = useAddNewMessageMutation()
   const [searchTerm, setSearchTerm] = useState("");
   const [message, setMessage] = useState("")
   const clearSearchTerm = () => setSearchTerm("");
+
+  const onSendMessage = async () => {
+    if (message) {
+      await addNewMessage({group: groupId, sender: studentId, content: message})
+    }
+    setMessage("")
+  }
 
 
   let content;
@@ -69,14 +77,11 @@ const SingleGroup = ({ groupId }) => {
             <button
               disabled={!message}
               className={`px-4 py-2 text-white rounded-lg ${
-                message
+                (message && !isLoading)
                   ? "bg-blue-600 hover:bg-blue-700"
                   : "bg-gray-300 cursor-not-allowed"
               }`}
-              onClick={() => {
-                console.log("Message sent:", message);
-                setMessage("");
-              }}
+              onClick={onSendMessage}
             >
               Send
             </button>

@@ -4,7 +4,7 @@ import { useGetExamsQuery } from "./examsApiSlice";
 import { Link } from "react-router-dom";
 
 const ExamList = ({ class_id, subject_id }) => {
-  const { status } = useAuth();
+  const { status, has_made_full_tuition_fee_payment } = useAuth();
 
   // Use current date for filtering
   const currentDate = useMemo(
@@ -60,7 +60,7 @@ const ExamList = ({ class_id, subject_id }) => {
       const listItems = filteredExams.map((exam) => (
         <li
           key={exam.id}
-          className="p-4 bg-white rounded-lg shadow-md border border-gray-200 hover:bg-gray-50"
+          className={`p-4 bg-white rounded-lg shadow-md border border-gray-200 hover:bg-gray-50 ${!has_made_full_tuition_fee_payment ? "bg-gray-300 cursor-not-allowed" : ""}`}
         >
           <Link
             to={`${exam.id}`}

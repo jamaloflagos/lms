@@ -4,13 +4,12 @@ import { apiSlice } from "../../app/api/apiSlice";
 const groupAdapter = createEntityAdapter();
 const groupInitialState = groupAdapter.getInitialState();
 
-
 const groupApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getGroups: builder.query({
       query: (student_id) => ({
         url: "/groups",
-        params: {student_id}
+        params: { student_id },
       }),
       transformResponse: (responseData) => {
         return groupAdapter.setAll(groupInitialState, responseData);
@@ -27,14 +26,43 @@ const groupApiSlice = apiSlice.injectEndpoints({
     getMembers: builder.query({
       query: (groupId) => ({
         url: `/groups/${groupId}`,
-        params: { data: 'members' }
-      })
+        params: { data: "members" },
+      }),
     }),
     getMessages: builder.query({
-      query: (groupId) => ({
-        url: `/groups/${groupId}`,
-        params: { data: 'messages' }
-      })
+      query: ({ groupId }) => ({
+        url: `/groups/${groupId}/messages`,
+        // params: { data: "messages" },
+      }),
+      providesTags: [{type: "Message", id: "LIST"}],
+      onCacheEntryAdded: async (arg, lifecycleApi) => {
+        const ws = new WebSocket(
+          `ws://localhost/chat/${arg.groupName}`
+        );
+        try {
+          await lifecycleApi.cacheDataLoaded;
+          const listener = (event) => {
+            const message = JSON.parse(event.data);
+            switch (message.type) {
+              case "chat_message": {
+                lifecycleApi.updateCachedData((draft) => {
+                  draft.push(message.payload);
+                  draft.sort((a, b) => b.date.localeCompare(a.date));
+                });
+
+                break;
+              }
+              default:
+                break;
+            }
+          };
+
+          ws.addEventListener("message", listener);
+        } catch (error) {}
+
+        await lifecycleApi.cacheEntryRemoved;
+        ws.close();
+      },
     }),
     addNewGroup: builder.mutation({
       query: (initialGroup) => {
@@ -44,7 +72,7 @@ const groupApiSlice = apiSlice.injectEndpoints({
           body: {
             ...initialGroup,
           },
-        }
+        };
       },
       invalidatesTags: [{ type: "Group", id: "LIST" }],
     }),
@@ -58,7 +86,7 @@ const groupApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Group", id: arg.id },
-        { type: "Group", id: "LIST" }
+        { type: "Group", id: "LIST" },
       ],
     }),
     deleteGroup: builder.mutation({
@@ -66,33 +94,35 @@ const groupApiSlice = apiSlice.injectEndpoints({
         url: `/groups/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "Group", id: arg.id },
-      ],
+      invalidatesTags: (result, error, arg) => [{ type: "Group", id: arg.id }],
     }),
+    addNewMessage: builder.mutation({
+      query: (messageData) => ({
+        url: "groups/messages",
+        method: "POST",
+        body: { ...messageData }
+      }),
+      invalidatesTags: [{type: "Message", id: "LIST"}]
+    })
   }),
 });
 
 export const {
-    useGetGroupsQuery,
-    useAddNewGroupMutation,
-    useUpdateGroupMutation,
-    useDeleteGroupMutation,
-    useGetMessagesQuery,
+  useGetGroupsQuery,
+  useAddNewGroupMutation,
+  useUpdateGroupMutation,
+  useDeleteGroupMutation,
+  useGetMessagesQuery,
+  useAddNewMessageMutation
 } = groupApiSlice;
 
-const selectGroupsResult =
-  groupApiSlice.endpoints.getGroups.select();
+const selectGroupsResult = groupApiSlice.endpoints.getGroups.select();
 
 const selectGroupsData = createSelector(
   selectGroupsResult,
   (groupsResult) => groupsResult.data
 );
 
-export const { 
-    selectAll 
-} = groupAdapter.getSelectors(
+export const { selectAll } = groupAdapter.getSelectors(
   (state) => selectGroupsData(state) ?? groupInitialState
 );
-
-

@@ -22,6 +22,7 @@ function ApplicationForm({ classes }) {
     address: "",
     phone_number: "",
     d_o_b: "",
+    gender: "",
     parent_first_name: "",
     parent_last_name: "",
     parent_email: "",
@@ -111,6 +112,10 @@ function ApplicationForm({ classes }) {
     }
   }, [isSuccess, navigate]);
 
+  console.log('====================================');
+  console.log(formData);
+  console.log('====================================');
+
   const classOptions = classes?.map((_class) => (
     <option value={_class.id} key={_class.id}>
       {_class.name}
@@ -147,6 +152,7 @@ function ApplicationForm({ classes }) {
         {[
           { id: "first_name", label: "First Name" },
           { id: "last_name", label: "Last Name" },
+          { id: "gender", label: "Gender" },
           { id: "email", label: "Email", type: "email" },
           { id: "address", label: "Address", type: "textarea" },
           { id: "phone_number", label: "Contact Phone" },

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useGetMessagesQuery } from "./groupsApiSlice";
 import useAuth from "../../hooks/useAuth";
 
-const MessagesList = ({ searchTerm, groupId }) => {
+const MessagesList = ({ searchTerm, groupId, groupName }) => {
   const { user_id: studentId } = useAuth();
   const {
     data: messages = [],
@@ -10,7 +10,7 @@ const MessagesList = ({ searchTerm, groupId }) => {
     isSuccess,
     isError,
     error,
-  } = useGetMessagesQuery(groupId);
+  } = useGetMessagesQuery({groupId, groupName});
 
   const [highlightIndex, setHighlightIndex] = useState(0);
   const [filteredMessages, setFilteredMessages] = useState([]);
@@ -23,7 +23,7 @@ const MessagesList = ({ searchTerm, groupId }) => {
       setFilteredMessages(searchResults);
       setHighlightIndex(0);
     } else {
-      setFilteredMessages([]);
+      // setFilteredMessages([]);
     }
   }, [searchTerm, messages]);
 
@@ -44,7 +44,7 @@ const MessagesList = ({ searchTerm, groupId }) => {
 
   if (isSuccess) {
     content = (
-      <div className="bg-white shadow-md p-4 rounded-lg space-y-4">
+      <div className="bg-white shadow-md p-4 rounded-lg space-y-4 pb-20">
         {searchTerm && filteredMessages.length === 0 && (
           <div className="bg-red-200 text-red-700 p-2 rounded-md text-center">
             No messages found for "{searchTerm}"
