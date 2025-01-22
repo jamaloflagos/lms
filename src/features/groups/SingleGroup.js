@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { useAddNewMessageMutation, useGetGroupsQuery } from "./groupsApiSlice";
+import { useGetGroupsQuery, useGetMessagesQuery } from "./groupsApiSlice";
 import MessagesList from "./MessagesList";
 import { Link } from "react-router-dom";
 
@@ -11,17 +11,71 @@ const SingleGroup = ({ groupId }) => {
       group: data?.entities[groupId],
     }),
   });
-  const [addNewMessage, {isLoading}] = useAddNewMessageMutation()
+  const {
+    data: fetchedMessages = [],
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetMessagesQuery({groupId: group.id, groupName: group.group_name});
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [message, setMessage] = useState("")
+  const [newMessage, setNewMessage] = useState("")
+  const [messages, setMessages] = useState([])
+  const webSocketRef = useRef(null);
   const clearSearchTerm = () => setSearchTerm("");
 
-  const onSendMessage = async () => {
-    if (message) {
-      await addNewMessage({group: groupId, sender: studentId, content: message})
+  useEffect(() => {
+    if (fetchedMessages && fetchedMessages.length > 0) {
+      setMessages(fetchedMessages)
     }
-    setMessage("")
-  }
+  }, [fetchedMessages])
+
+  useEffect(() => {
+    const webSocketUrl = `ws://localhost:8000/ws/chat/${group.group_name}/`;
+    const socket = new WebSocket(webSocketUrl);
+    webSocketRef.current = socket;
+
+    // WebSocket event listeners
+    socket.onopen = () => {
+      console.log("WebSocket connection opened.");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.payload) {
+        setMessages((prevMessages) => [...prevMessages, data.payload]);
+      }
+    };
+
+    socket.onclose = (event) => {
+      console.error(
+        `WebSocket connection closed: code=${event.code}, reason=${event.reason}`
+      );
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    // Cleanup function to close WebSocket when component unmounts
+    return () => {
+      socket.close();
+    };
+  }, [group.group_name]);
+
+  // Send a new message
+  const sendMessage = () => {
+    if (webSocketRef.current && newMessage.trim()) {
+      const payload = {
+        message: newMessage,
+        student_id: studentId,
+        group_id: group.id,
+      };
+      webSocketRef.current.send(JSON.stringify(payload));
+      setNewMessage(""); 
+    }
+  };
 
 
   let content;
@@ -64,24 +118,24 @@ const SingleGroup = ({ groupId }) => {
           )}
         </div>
 
-        <MessagesList searchTerm={searchTerm} groupId={group.id} />
-        <div className="fixed bottom-0 sm:left-64 sm:right-0 bg-white shadow-md z-10 p-4 max width">
+        <MessagesList searchTerm={searchTerm} messages={messages} isLoading={isLoading} isSuccess={isSuccess} isError={isError} error={error} />
+        <div className="fixed bottom-0 left-0 right-0 sm:left-64 bg-white shadow-md z-10 p-4 max width">
           <div className="flex items-center space-x-4">
             <input
               type="text"
               placeholder="Type message here..."
-              onChange={(e) => setMessage(e.target.value)}
-              value={message}
+              onChange={(e) => setNewMessage(e.target.value)}
+              value={newMessage}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
-              disabled={!message}
+              disabled={!newMessage}
               className={`px-4 py-2 text-white rounded-lg ${
-                (message && !isLoading)
+                newMessage
                   ? "bg-blue-600 hover:bg-blue-700"
                   : "bg-gray-300 cursor-not-allowed"
               }`}
-              onClick={onSendMessage}
+              onClick={sendMessage}
             >
               Send
             </button>

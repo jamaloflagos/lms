@@ -1,16 +1,8 @@
 import { useState, useEffect } from "react";
-import { useGetMessagesQuery } from "./groupsApiSlice";
 import useAuth from "../../hooks/useAuth";
 
-const MessagesList = ({ searchTerm, groupId, groupName }) => {
+const MessagesList = ({ searchTerm, messages, isLoading, isSuccess, isError, error }) => {
   const { user_id: studentId } = useAuth();
-  const {
-    data: messages = [],
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetMessagesQuery({groupId, groupName});
 
   const [highlightIndex, setHighlightIndex] = useState(0);
   const [filteredMessages, setFilteredMessages] = useState([]);

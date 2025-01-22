@@ -32,37 +32,7 @@ const groupApiSlice = apiSlice.injectEndpoints({
     getMessages: builder.query({
       query: ({ groupId }) => ({
         url: `/groups/${groupId}/messages`,
-        // params: { data: "messages" },
       }),
-      providesTags: [{type: "Message", id: "LIST"}],
-      onCacheEntryAdded: async (arg, lifecycleApi) => {
-        const ws = new WebSocket(
-          `ws://localhost/chat/${arg.groupName}`
-        );
-        try {
-          await lifecycleApi.cacheDataLoaded;
-          const listener = (event) => {
-            const message = JSON.parse(event.data);
-            switch (message.type) {
-              case "chat_message": {
-                lifecycleApi.updateCachedData((draft) => {
-                  draft.push(message.payload);
-                  draft.sort((a, b) => b.date.localeCompare(a.date));
-                });
-
-                break;
-              }
-              default:
-                break;
-            }
-          };
-
-          ws.addEventListener("message", listener);
-        } catch (error) {}
-
-        await lifecycleApi.cacheEntryRemoved;
-        ws.close();
-      },
     }),
     addNewGroup: builder.mutation({
       query: (initialGroup) => {
@@ -96,14 +66,6 @@ const groupApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "Group", id: arg.id }],
     }),
-    addNewMessage: builder.mutation({
-      query: (messageData) => ({
-        url: "groups/messages",
-        method: "POST",
-        body: { ...messageData }
-      }),
-      invalidatesTags: [{type: "Message", id: "LIST"}]
-    })
   }),
 });
 
@@ -113,7 +75,6 @@ export const {
   useUpdateGroupMutation,
   useDeleteGroupMutation,
   useGetMessagesQuery,
-  useAddNewMessageMutation
 } = groupApiSlice;
 
 const selectGroupsResult = groupApiSlice.endpoints.getGroups.select();
