@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "../features/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
 import usePersist from "../hooks/usePersist";
-import Footer from "../components/Footer";
+import Spinner from "../components/Spinner";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
 
   useEffect(() => {
-    setErrMsg(""); // Clear error message when input changes
+    setErrMsg("");
   }, [email, password]);
 
   const onSubmit = async (e) => {
@@ -50,7 +50,7 @@ const Login = () => {
     }
   };
 
-  if (isLoading) return <p className="text-center text-blue-500">Loading...</p>;
+  if (isLoading) return <Spinner />;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">

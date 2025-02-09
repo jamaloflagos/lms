@@ -34,19 +34,20 @@ export const authApiSlice = apiSlice.injectEndpoints({
         refresh: builder.mutation({
             query: () => ({
                 url: "/auth/refresh",
-                method: "GET",
+                method: "POST",
+                credentials: "include",  // ⬅️ Ensures the refresh cookie is sent!
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    const { data } = await queryFulfilled
-                    console.log(data)
-                    const { access: accessToken } = data
-                    dispatch(setCredentials({ accessToken }))
+                    const { data } = await queryFulfilled;
+                    const { access: accessToken } = data;
+                    dispatch(setCredentials({ accessToken }));
                 } catch (err) {
-                    console.log(err)
+                    console.log("Refresh error:", err);
                 }
             }
         }),
+        
     })
 })
 

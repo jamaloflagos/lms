@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useGetTeachersQuery } from "./teachersApiSlice";
 import { Link } from "react-router-dom";
+import Spinner from "../../components/Spinner";
 
 const TeachersList = () => {
   const {
@@ -59,7 +60,7 @@ const TeachersList = () => {
   let content;
 
   if (isLoading) {
-    content = <p className="text-center text-gray-500">Loading...</p>;
+    content = <Spinner />;
   }
 
   if (isError) {

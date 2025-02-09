@@ -1,3 +1,4 @@
+import Spinner from "../../components/Spinner";
 import useAuth from "../../hooks/useAuth";
 import { useGetOutlinesQuery } from "./outlinesApiSlice";
 import { Link } from "react-router-dom";
@@ -22,7 +23,7 @@ const OutlineLists = ({ classId, subjectId }) => {
 
   let content;
 
-  if (isLoading) content = <p className="text-gray-600">Loading...</p>;
+  if (isLoading) content = <Spinner />;
 
   if (isError) content = <p className="text-red-500">{error?.data?.message}</p>;
 

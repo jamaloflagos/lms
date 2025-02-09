@@ -3,6 +3,7 @@ import LessonsList from "../lessons/LessonsList";
 import { useGetModulesQuery } from "./modulesApiSlice"
 import { Link } from "react-router-dom"
 import useAuth from "../../hooks/useAuth";
+import Spinner from "../../components/Spinner";
 
 const ModulesList = () => {
   const { modules = [], isLoading, isSuccess, isError, error} = useGetModulesQuery('modulesList', {
@@ -30,7 +31,7 @@ const ModulesList = () => {
 
   let content;
 
-  if (isLoading) content = <p>Loading...</p>
+  if (isLoading) content = <Spinner />
 
   if (isError) content = <p>{error?.data?.message}</p>
 

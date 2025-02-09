@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { useGetGroupsQuery, useUpdateGroupMutation } from "./groupsApiSlice";
+import Spinner from "../../components/Spinner";
 
 const GroupsList = () => {
   const { user_id: studentId } = useAuth();
@@ -45,7 +46,7 @@ const GroupsList = () => {
 
   let content;
   if (isLoading) {
-    content = <p className="text-center text-gray-500">Loading...</p>;
+    content = <Spinner />;
   } else if (isError) {
     content = <p className="text-center text-red-500">{error?.data?.message}</p>;
   } else if (isSuccess) {

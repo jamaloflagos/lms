@@ -1,3 +1,4 @@
+import Spinner from "../../components/Spinner";
 import useAuth from "../../hooks/useAuth";
 import { useGetScoreSheetsQuery } from "./scoresApiSlice";
 
@@ -15,7 +16,7 @@ const ScoreSheet = ({ class_id, student_id }) => {
     let content;
 
     if (isLoading) {
-        content = <p className="text-gray-600">Loading...</p>;
+        content = <Spinner />;
     } else if (isError) {
         content = <p className="text-red-600">{error?.data?.message}</p>;
     } else if (isSuccess) {

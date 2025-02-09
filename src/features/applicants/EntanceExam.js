@@ -5,6 +5,7 @@ import {
   useGetEntranceExamQuestionsQuery,
   useSubmitEntranceExamAnswersMutation,
 } from "./applicantsApiSlice";
+import Spinner from "../../components/Spinner";
 
 const EntranceExam = ({ id: applicantId }) => {
   const [timer, setTimer] = useState(3600);
@@ -133,7 +134,7 @@ const EntranceExam = ({ id: applicantId }) => {
     
 
   let content;
-  if (isLoading) content = <p>Loading....</p>;
+  if (isLoading) content = <Spinner />;
   if (isError || isSubmitError) content = <p>{errContent}</p>;
   if (isSuccess) {
     content = (

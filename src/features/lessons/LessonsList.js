@@ -1,3 +1,4 @@
+import Spinner from "../../components/Spinner"
 import { useGetLessonsQuery } from "./lessonsApiSlice"
 import { Link } from "react-router-dom"
 
@@ -21,7 +22,7 @@ const LessonsList = ({ moduleId }) => {
 
   let content;
 
-  if (isLoading) content = <p>Loading...</p>
+  if (isLoading) content = <Spinner />
 
   if (isError) content = <p>{error?.data?.message}</p>
 

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useGetEntranceExamScoreQuery } from "./applicantsApiSlice";
+import Spinner from "../../components/Spinner";
 
 const ExamScore = ({ applicantId }) => {
     const {
@@ -12,7 +13,7 @@ const ExamScore = ({ applicantId }) => {
 
     let content;
   
-    if (isLoading) content = <p>Loading...</p>;
+    if (isLoading) content = <Spinner />;
     if (isError && !error?.status === 404) content = <p>{error?.data?.detail}</p>;
     if (isError && error?.status === 404) {
       content = (

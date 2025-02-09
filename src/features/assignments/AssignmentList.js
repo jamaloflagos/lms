@@ -2,6 +2,7 @@ import {  useMemo } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useGetAssignmentsQuery } from "./assignmentsApiSlice";
 import { Link } from "react-router-dom";
+import Spinner from "../../components/Spinner";
 
 const AssignmentList = ({ class_id, subject_id }) => {
     const { status } = useAuth();
@@ -42,7 +43,7 @@ const AssignmentList = ({ class_id, subject_id }) => {
     let content;
 
     if (isLoading) {
-        content = <p className="text-gray-600">Loading...</p>;
+        content = <Spinner />;
     } else if (isError) {
         content = (
             <p className="text-red-600">

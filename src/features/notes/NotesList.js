@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { useGetNotesQuery } from "./notesApiSlice";
+import Spinner from "../../components/Spinner";
 
 const NotesList = ({ outlineId }) => {
   const { status } = useAuth();
@@ -24,7 +25,7 @@ const NotesList = ({ outlineId }) => {
   let content;
 
   if (isLoading)
-    content = <p className="text-gray-600 text-center">Loading...</p>;
+    content = <Spinner />;
 
   if (isError)
     content = <p className="text-red-500 text-center">{error?.data?.message}</p>;

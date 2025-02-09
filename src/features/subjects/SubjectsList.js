@@ -3,6 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import OutlineLists from "../outlines/OutlineLists";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Spinner from "../../components/Spinner";
 
 const SubjectsList = () => {
   const { status, user_id: teacher_id, class_id } = useAuth();
@@ -31,7 +32,7 @@ const SubjectsList = () => {
 
   let content;
 
-  if (isLoading) content = <p className="text-gray-500 text-center">Loading...</p>;
+  if (isLoading) content = <Spinner />;
 
   if (isError) content = <p className="text-red-500 text-center">{error?.data?.message}</p>;
 

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useGetClassesQuery } from "./classesApiSlice";
 import { useEffect, useState } from "react";
+import Spinner from "../../components/Spinner";
 
 const ClassesList = () => {
   const { classes = [], isLoading, isSuccess, isError, error } = useGetClassesQuery(undefined, {
@@ -57,7 +58,7 @@ const ClassesList = () => {
   };
 
   let content;
-  if (isLoading) content = <p className="text-center text-gray-500">Loading...</p>;
+  if (isLoading) content = <Spinner />;
 
   if (isError)
     content = <p className="text-center text-red-500">{error?.data?.message}</p>;

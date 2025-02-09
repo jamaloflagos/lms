@@ -51,6 +51,7 @@ import Groups from "./pages/student/Groups";
 import NewGroup from "./pages/student/NewGroup";
 import Group from "./pages/student/Group";
 import EditGroup from "./pages/student/EditGroup";
+import VisitorLogin from "./pages/VisistorLogin";
 
 function App() {
   const { is_form_teacher } = useAuth();
@@ -61,7 +62,6 @@ function App() {
     "tests",
     "exams",
     "reports",
-    "word-of-the-day",
     "study-groups"
   ];
   const applicantUrlSegments = ["dashboard"];
@@ -79,7 +79,7 @@ function App() {
     <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route index element={<Public />} />
-        <Route path="login" element={<Login />} />
+        <Route path="login" element={<VisitorLogin />} />
         <Route path="apply" element={<Apply />} />
 
         <Route element={<PersistLogin />}>

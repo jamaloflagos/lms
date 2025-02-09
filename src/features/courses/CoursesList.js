@@ -2,6 +2,7 @@ import { useGetCoursesQuery } from "./coursesApiSlice"
 import Course from "./Course"
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
+import Spinner from "../../components/Spinner";
 
 const CoursesList = () => {
     const { isStudent, isTeacher } = useAuth()
@@ -16,7 +17,7 @@ const CoursesList = () => {
 
     let content;
 
-    if (isLoading) content = <p>Loading...</p>
+    if (isLoading) content = <Spinner />
 
     if (isError) content = <p>{error?.data?.message}</p>
 

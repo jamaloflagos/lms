@@ -124,7 +124,7 @@ const SingleAssignment = ({ assignment_id, class_id, subject_id }) => {
                       questions={questions}
                     />
                     {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-                    <button onClick={handleSubmit}>Submit</button>
+                    <button onClick={handleSubmit} className="text-white bg-blue-500 p-2 rounded-lg mt-2">Submit</button>
             
                     {displayPrompt && (
                       <div>
